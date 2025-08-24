@@ -174,10 +174,9 @@ const HeroSection = () => {
             }}
             className="mx-auto drop-shadow-2xl heading-responsive"
           >
-            <span style={{ color: '#FFD93D', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>REC</span>
-            <span style={{ color: '#D42000', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>RUI</span>
-            <span style={{ color: '#47A63E', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>TME</span>
-            <span style={{ color: '#034DA1', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>NTS</span>
+            <span style={{ color: '#D42000', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>RECR</span>
+            <span style={{ color: '#47A63E', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>UITM</span>
+            <span style={{ color: '#034DA1', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>ENTS</span>
             <span style={{ color: '#ffe600', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000', marginLeft: '0.5em' }}>OPEN</span>
           </h1>
         </div>
