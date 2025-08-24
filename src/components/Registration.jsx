@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import confetti from 'canvas-confetti';
 import Image from 'next/image';
 
 const RegistrationForm = () => {
@@ -18,6 +19,89 @@ const RegistrationForm = () => {
 
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [errors, setErrors] = useState({});
+
+	// Mario-themed confetti function
+	const fireMarioConfetti = () => {
+		// First burst - Mario colors (red and blue)
+		confetti({
+			particleCount: 50,
+			spread: 60,
+			origin: { y: 0.7, x: 0.3 },
+			colors: ['#ff4757', '#3742fa', '#ffa502', '#2ed573'],
+			shapes: ['square', 'circle'],
+			scalar: 1.2,
+		});
+
+		// Second burst - from other side
+		setTimeout(() => {
+			confetti({
+				particleCount: 50,
+				spread: 60,
+				origin: { y: 0.7, x: 0.7 },
+				colors: ['#ff4757', '#3742fa', '#ffa502', '#2ed573'],
+				shapes: ['square', 'circle'],
+				scalar: 1.2,
+			});
+		}, 200);
+
+		// Final burst - center top
+		setTimeout(() => {
+			confetti({
+				particleCount: 30,
+				spread: 80,
+				origin: { y: 0.5, x: 0.5 },
+				colors: ['#ffdd59', '#ff6b6b', '#4ecdc4', '#45b7d1'],
+				shapes: ['circle'],
+				scalar: 0.8,
+			});
+		}, 400);
+	};
+
+	// Mario-themed toast messages
+	const getMarioSuccessMessage = (name) => {
+		const messages = [
+			`Wahoo! Welcome to the adventure, ${name}! Your quest begins now!`,
+			`Mamma mia! ${name}, you've joined the crew! Let's-a-go!`,
+			`Yahoo! ${name}, you're officially part of GCSRM! Time to level up!`,
+			`It's-a-me, welcoming ${name} to the team! Your journey starts here!`,
+			`Woohoo! ${name}, you've powered up and joined GCSRM! Ready for adventure?`,
+		];
+		return messages[Math.floor(Math.random() * messages.length)];
+	};
+
+	const getMarioErrorMessage = (error) => {
+		// Handle duplicate key errors specifically
+		if (error.includes('E11000') || error.includes('duplicate key')) {
+			if (error.includes('registrationNumber')) {
+				return "Oops! That registration number is already registered! Looks like you've already joined our adventure or someone beat you to it!";
+			}
+			if (error.includes('email')) {
+				return 'Hold up! That email is already registered! Did you forget you already signed up for this epic quest?';
+			}
+			return 'Whoa there! That information is already registered! Double-check your details, hero!';
+		}
+
+		// Default Mario-themed error messages for other errors
+		const errorMessages = [
+			`Oops! Looks like we hit a ? block! ${error}`,
+			`Mamma mia! Something went wrong: ${error}`,
+			`Houston, we have a problem! ${error}`,
+			`Hold up! We've got a small hiccup: ${error}`,
+			`Uh oh! Time to call Luigi for help: ${error}`,
+		];
+		return errorMessages[Math.floor(Math.random() * errorMessages.length)];
+	};
+
+	const getValidationErrorMessage = () => {
+		const messages = [
+			"Hold on there, speedster! Let's fix those details first!",
+			'Whoa there! Mario needs all the info to start your adventure!',
+			'Slow down, hero! Complete your profile to join the quest!',
+			'Almost there! Just need to polish those details!',
+			'Hey, looks like some fields need your attention!',
+		];
+		return messages[Math.floor(Math.random() * messages.length)];
+	};
 
 	// Pre-fill domain if selected from domain page
 	useEffect(() => {
@@ -83,11 +167,47 @@ const RegistrationForm = () => {
 		e.preventDefault();
 
 		if (!validateForm()) {
-			toast.error('Please fix the errors before submitting!');
+			toast.error(getValidationErrorMessage(), {
+				duration: 4000,
+				style: {
+					background: '#fc8e2d',
+					color: '#000',
+					fontSize: '14px',
+					fontWeight: '800',
+					fontFamily: 'ArcadeClassic',
+					border: '4px solid #000',
+					borderRadius: '0px',
+					padding: '16px 20px',
+					boxShadow: '8px 8px 0px #000',
+					textTransform: 'uppercase',
+					letterSpacing: '1px',
+				},
+				icon: '🎯',
+			});
 			return;
 		}
 
 		setIsSubmitting(true);
+
+		// Show loading toast
+		const loadingToastId = toast.loading(
+			'🎮 Processing your adventure request...',
+			{
+				style: {
+					background: '#fc8e2d',
+					color: '#000',
+					fontSize: '14px',
+					fontWeight: '800',
+					fontFamily: 'ArcadeClassic',
+					border: '4px solid #000',
+					borderRadius: '0px',
+					padding: '16px 20px',
+					boxShadow: '8px 8px 0px #000',
+					textTransform: 'uppercase',
+					letterSpacing: '1px',
+				},
+			}
+		);
 
 		try {
 			const response = await fetch('/api/register', {
@@ -98,19 +218,39 @@ const RegistrationForm = () => {
 
 			const result = await response.json();
 
+			// Dismiss loading toast
+			toast.dismiss(loadingToastId);
+
 			if (response.ok) {
-				toast.success(
-					`🎉 Welcome to GCSRM, ${formData.name}! Your adventure begins now! 🚀`,
-					{
-						duration: 6000,
-						style: {
-							background: '#10b981',
-							color: '#fff',
-							fontSize: '16px',
-							fontWeight: 'bold',
-						},
-					}
-				);
+				// Fire confetti first
+				fireMarioConfetti();
+
+				// Then show success toast
+				toast.success(getMarioSuccessMessage(formData.name), {
+					duration: 7000,
+					style: {
+						background: '#fc8e2d',
+						color: '#000',
+						fontSize: '15px',
+						fontWeight: '800',
+						fontFamily: 'ArcadeClassic',
+						border: '4px solid #000',
+						borderRadius: '0px',
+						padding: '18px 22px',
+						boxShadow: '10px 10px 0px #000',
+						textAlign: 'center',
+						maxWidth: '450px',
+						textTransform: 'uppercase',
+						letterSpacing: '1px',
+					},
+					icon: '🎮',
+					iconTheme: {
+						primary: '#000',
+						secondary: '#fc8e2d',
+					},
+				});
+
+				// Reset form
 				setFormData({
 					name: '',
 					phone: '',
@@ -121,24 +261,48 @@ const RegistrationForm = () => {
 					email: '',
 				});
 			} else {
-				toast.error(`Registration failed: ${result.error}`, {
-					duration: 5000,
+				toast.error(getMarioErrorMessage(result.error), {
+					duration: 6000,
 					style: {
-						background: '#ef4444',
-						color: '#fff',
-						fontSize: '16px',
+						background: '#fc8e2d',
+						color: '#000',
+						fontSize: '14px',
+						fontWeight: '800',
+						fontFamily: 'ArcadeClassic',
+						border: '4px solid #000',
+						borderRadius: '0px',
+						padding: '16px 20px',
+						boxShadow: '8px 8px 0px #000',
+						textTransform: 'uppercase',
+						letterSpacing: '1px',
 					},
+					icon: '🔧',
 				});
 			}
 		} catch (error) {
-			toast.error('Network error. Please try again.', {
-				duration: 5000,
-				style: {
-					background: '#ef4444',
-					color: '#fff',
-					fontSize: '16px',
-				},
-			});
+			// Dismiss loading toast
+			toast.dismiss(loadingToastId);
+
+			toast.error(
+				'🛠️ Oops! The connection pipe seems blocked! Try again, brave adventurer!',
+				{
+					duration: 5000,
+					style: {
+						background: '#fc8e2d',
+						color: '#000',
+						fontSize: '14px',
+						fontWeight: '800',
+						fontFamily: 'ArcadeClassic',
+						border: '4px solid #000',
+						borderRadius: '0px',
+						padding: '16px 20px',
+						boxShadow: '8px 8px 0px #000',
+						textTransform: 'uppercase',
+						letterSpacing: '1px',
+					},
+					icon: '📡',
+				}
+			);
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -396,8 +560,8 @@ const RegistrationForm = () => {
 										minHeight: '44px',
 									}}>
 									{isSubmitting
-										? 'JOINING...'
-										: 'JOIN THE ADVENTURE!'}
+										? ' LOADING ADVENTURE...'
+										: ' START MY QUEST!'}
 								</button>
 							</div>
 						</form>
@@ -409,34 +573,84 @@ const RegistrationForm = () => {
 			<Toaster
 				position="top-center"
 				reverseOrder={false}
-				gutter={8}
+				gutter={16}
 				containerClassName=""
-				containerStyle={{}}
+				containerStyle={{
+					zIndex: 9999,
+				}}
 				toastOptions={{
-					// Define default options
+					// Define default options with retro pixel theme
 					className: '',
-					duration: 4000,
+					duration: 5000,
 					style: {
-						background: '#363636',
-						color: '#fff',
-						fontSize: '16px',
-						fontWeight: '600',
-						borderRadius: '8px',
-						boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+						background: '#fc8e2d',
+						color: '#000',
+						fontSize: '14px',
+						fontWeight: '800',
+						fontFamily: 'ArcadeClassic',
+						borderRadius: '0px',
+						border: '4px solid #000',
+						padding: '16px 20px',
+						boxShadow: '8px 8px 0px #000',
+						textAlign: 'center',
+						textTransform: 'uppercase',
+						letterSpacing: '1px',
 					},
-					// Default options for specific types
+					// Enhanced options for specific types
 					success: {
-						duration: 6000,
+						duration: 7000,
+						style: {
+							background: '#fc8e2d',
+							color: '#000',
+							fontSize: '15px',
+							fontWeight: '800',
+							fontFamily: 'ArcadeClassic',
+							border: '4px solid #000',
+							borderRadius: '0px',
+							padding: '18px 22px',
+							boxShadow: '10px 10px 0px #000',
+							textTransform: 'uppercase',
+							letterSpacing: '1px',
+							maxWidth: '450px',
+						},
 						iconTheme: {
-							primary: '#10b981',
-							secondary: '#fff',
+							primary: '#000',
+							secondary: '#fc8e2d',
 						},
 					},
 					error: {
-						duration: 5000,
+						duration: 6000,
+						style: {
+							background: '#fc8e2d',
+							color: '#000',
+							fontSize: '14px',
+							fontWeight: '800',
+							fontFamily: 'ArcadeClassic',
+							border: '4px solid #000',
+							borderRadius: '0px',
+							padding: '16px 20px',
+							boxShadow: '8px 8px 0px #000',
+							textTransform: 'uppercase',
+							letterSpacing: '1px',
+						},
 						iconTheme: {
-							primary: '#ef4444',
-							secondary: '#fff',
+							primary: '#000',
+							secondary: '#fc8e2d',
+						},
+					},
+					loading: {
+						style: {
+							background: '#fc8e2d',
+							color: '#000',
+							fontSize: '14px',
+							fontWeight: '800',
+							fontFamily: 'ArcadeClassic',
+							border: '4px solid #000',
+							borderRadius: '0px',
+							padding: '16px 20px',
+							boxShadow: '8px 8px 0px #000',
+							textTransform: 'uppercase',
+							letterSpacing: '1px',
 						},
 					},
 				}}
