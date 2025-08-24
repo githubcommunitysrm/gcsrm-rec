@@ -11,7 +11,7 @@ const RegistrationForm = () => {
 		domain: '',
 		registrationNumber: '',
 		year: '',
-		degree: '',
+		degreeWithBranch: '',
 		subdomain: '',
 		email: '',
 	});
@@ -53,6 +53,9 @@ const RegistrationForm = () => {
 		} else if (!raRegex.test(formData.registrationNumber.trim())) {
 			newErrors.registrationNumber =
 				'Please enter a valid registration number (Format: RA24XXXXXXXX or RA25XXXXXXXX)!';
+		}
+		if (!formData.degreeWithBranch.trim()) {
+			newErrors.degreeWithBranch = 'Degree with branch is required!';
 		}
 		if (!formData.year) newErrors.year = 'Please select your college year!';
 		if (!formData.domain) newErrors.domain = 'Please choose your domain!';
@@ -114,7 +117,7 @@ const RegistrationForm = () => {
 					domain: '',
 					registrationNumber: '',
 					year: '',
-					degree: '',
+					degreeWithBranch: '',
 					email: '',
 				});
 			} else {
@@ -291,18 +294,19 @@ const RegistrationForm = () => {
 							<div>
 								<input
 									type="text"
-									name="degree"
-									value={formData.degree}
+									name="degreeWithBranch"
+									value={formData.degreeWithBranch}
 									onChange={handleChange}
+									required
 									className={inputClasses(
-										'degree',
-										formData.degree
+										'degreeWithBranch',
+										formData.degreeWithBranch
 									)}
-									placeholder="Degree (e.g. B.Tech - CSE)"
+									placeholder="Degree with Branch (e.g. B.Tech - CSE)"
 								/>
-								{errors.degree && (
+								{errors.degreeWithBranch && (
 									<p className="text-red-600 text-xs font-bold mt-1">
-										❌ {errors.degree}
+										❌ {errors.degreeWithBranch}
 									</p>
 								)}
 							</div>
