@@ -113,6 +113,18 @@ const HeroSection = () => {
           animation: bowserWalk 10s ease-in-out infinite;
         }
         
+        @keyframes cloudFloat {
+          0% { transform: translateY(0); }
+          50% { transform: translateY(-18px); }
+          100% { transform: translateY(0); }
+        }
+        .cloud-float {
+          animation: cloudFloat 4s ease-in-out infinite;
+        }
+        .cloud-float-delayed {
+          animation: cloudFloat 4s ease-in-out infinite;
+          animation-delay: 2s;
+        }
         @keyframes fallingBoss {
           <h1
             style={{
@@ -135,10 +147,10 @@ const HeroSection = () => {
       `}</style>
       
       {/* Floating Clouds - Responsive positioning with better mobile spacing */}
-      <div className="absolute top-8 left-2 sm:top-12 sm:left-8 md:top-16 md:left-16 w-32 sm:w-40 md:w-48 h-20 sm:h-26 md:h-32 opacity-90 animate-float">
+      <div className="absolute top-8 left-2 sm:top-12 sm:left-8 md:top-16 md:left-16 w-32 sm:w-40 md:w-48 h-20 sm:h-26 md:h-32 opacity-90 cloud-float">
         <Image src="/cloud-1.png" alt="Cloud" fill className="object-contain" />
       </div>
-      <div className="absolute top-12 right-2 sm:top-18 sm:right-12 md:top-24 md:right-20 w-36 sm:w-44 md:w-52 h-24 sm:h-30 md:h-36 opacity-90 animate-float-delayed">
+      <div className="absolute top-12 right-2 sm:top-18 sm:right-12 md:top-24 md:right-20 w-36 sm:w-44 md:w-52 h-24 sm:h-30 md:h-36 opacity-90 cloud-float-delayed">
         <Image src="/cloud-2.png" alt="Cloud" fill className="object-contain" />
       </div>
 
