@@ -8,7 +8,7 @@ const Footer = () => {
 	return (
 		<div className="relative">
 			<footer
-				className="flex flex-col md:px-10 pb-10 relative pt-24"
+				className="flex flex-col md:px-10 pb-10 relative pt-16"
 				style={{
 					backgroundImage: 'url(/block_textured.png)',
 					backgroundRepeat: 'repeat',
