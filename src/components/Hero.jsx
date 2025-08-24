@@ -162,7 +162,7 @@ const HeroSection = () => {
           <h1
             style={{
               fontFamily: 'SuperMario256, Arial, sans-serif',
-              fontSize: 'clamp(2.2rem, 7vw, 7rem)',
+              fontSize: 'clamp(2.1rem, 7vw, 7rem)',
               WebkitTextStroke: 'min(2vw, 3px) #000',
               margin: 0,
               display: 'flex',
@@ -172,12 +172,12 @@ const HeroSection = () => {
               whiteSpace: 'nowrap',
               overflowX: 'auto',
             }}
-            className="mx-auto drop-shadow-2xl heading-responsive"
+            className="mx-auto heading-responsive"
           >
-            <span style={{ color: '#D42000', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>RECR</span>
-            <span style={{ color: '#47A63E', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>UITM</span>
-            <span style={{ color: '#034DA1', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000' }}>ENTS</span>
-            <span style={{ color: '#ffe600', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #ff0000', marginLeft: '0.5em' }}>OPEN</span>
+            <span style={{ color: '#D42000', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00' }}>RECR</span>
+            <span style={{ color: '#47A63E', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00' }}>UITM</span>
+            <span style={{ color: '#034DA1', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00' }}>ENTS</span>
+            <span style={{ color: '#ffe600', textShadow: '4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00', marginLeft: '0.5em' }}>OPEN</span>
           </h1>
         </div>
 
@@ -196,11 +196,11 @@ const HeroSection = () => {
             overflowX: 'auto',
             width: '100%',
           }}
-          className="mx-auto drop-shadow-2xl heading-responsive"
+          className="mx-auto heading-responsive"
         >
           <span style={{
             color: '#FFD93D',
-            textShadow: '4px 4px 0 #3b3b3b, 8px 6px 0 #ff0000',
+            textShadow: '4px 4px 0 #3b3b3b, 8px 6px 0 #E67A00',
             letterSpacing: '0.05em',
             textAlign: 'center',
             width: '100%',
