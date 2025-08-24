@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const Domain = () => {
 	return (
-		<div className="relative min-h-screen bg-gradient-to-b from-sky-400 to-blue-500 overflow-hidden">
+		<div className="relative min-h-screen bg-gradient-to-b from-sky-400 to-blue-500 overflow-hidden pt-52">
 			<style jsx>{`
 				@font-face {
 					font-family: 'SuperMario256';
