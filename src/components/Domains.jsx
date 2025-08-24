@@ -6,6 +6,11 @@ const Domain = () => {
 	return (
 		<div className="relative min-h-screen bg-gradient-to-b from-sky-400 to-blue-500 overflow-hidden">
 			<style jsx>{`
+				@font-face {
+					font-family: 'SuperMario256';
+					src: url('/SuperMario256.ttf') format('truetype');
+					font-display: swap;
+				}
 				@keyframes cloudFloat {
 					0% {
 						transform: translateY(0);
@@ -49,15 +54,48 @@ const Domain = () => {
 
 			{/* Choose Your Path Title */}
 			<div className="flex justify-center pt-8 sm:pt-10 md:pt-10 lg:pt-10 mb-8 sm:mb-12 md:mb-16">
-				<div className="w-64 sm:w-80 md:w-96 lg:w-[14rem] xl:w-[16rem] h-auto z-20">
-					<Image
-						src="/choose-your-path.png"
-						alt="Choose Your Path"
-						width={448}
-						height={200}
-						className="object-contain w-full h-auto"
-						priority
-					/>
+				<div className="text-center z-20">
+					<h1
+						style={{
+							fontFamily: 'SuperMario256, Arial, sans-serif',
+							fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+							WebkitTextStroke: 'min(2vw, 3px) #000',
+							margin: 0,
+							display: 'flex',
+							justifyContent: 'center',
+							lineHeight: 1.1,
+							wordBreak: 'break-word',
+							whiteSpace: 'nowrap',
+							overflowX: 'auto',
+						}}
+						className="mx-auto heading-responsive">
+						<span
+							style={{
+								color: '#D42000',
+								textShadow:
+									'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+								marginRight: '0.3em',
+							}}>
+							CHOOSE
+						</span>
+						<span
+							style={{
+								color: '#47A63E',
+								textShadow:
+									'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+								marginRight: '0.3em',
+							}}>
+							YOUR
+						</span>
+						<span
+							style={{
+								color: '#ffe600',
+								textShadow:
+									'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+							}}>
+							PATH
+						</span>
+					</h1>
 				</div>
 			</div>
 
@@ -117,7 +155,8 @@ const Domain = () => {
 				/>
 			</div>
 
-			<div className="absolute bottom-16 sm:bottom-14 md:bottom-16 right-0 w-16 sm:w-20 md:w-24 lg:w-28 h-24 sm:h-28 md:h-32 lg:h-36 z-10 hidden sm:block">
+			{/* Mario Pipe - Right Side */}
+			<div className="absolute bottom-16 right-0 w-28 h-40 z-10">
 				<Image
 					src="/pipe_basic.png"
 					alt="Pipe"
@@ -126,7 +165,9 @@ const Domain = () => {
 					className="object-contain h-full w-auto"
 				/>
 			</div>
-			<div className="absolute bottom-40 sm:bottom-42 md:bottom-48 lg:bottom-51 right-0 w-20 sm:w-24 md:w-28 lg:w-32 h-10 sm:h-12 md:h-14 lg:h-14 z-20 hidden sm:block">
+
+			{/* Pipe Top - Right Side */}
+			<div className="absolute bottom-56 right-0 w-32 h-16 z-20">
 				<Image
 					src="/pipe_top.png"
 					alt="Pipe Top"
@@ -142,7 +183,7 @@ const Domain = () => {
 				style={{
 					backgroundImage: 'url(/block_textured.png)',
 					backgroundRepeat: 'repeat',
-					backgroundSize: '32px 32px',
+					backgroundSize: '64px 64px',
 					backgroundPosition: 'bottom',
 				}}
 			/>
