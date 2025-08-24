@@ -167,7 +167,7 @@ const Domain = () => {
 			</div>
 
 			{/* Pipe Top - Right Side */}
-			<div className="absolute bottom-56 right-0 w-32 h-16 z-20">
+			<div className="absolute bottom-54 right-0 w-32 h-16 z-20">
 				<Image
 					src="/pipe_top.png"
 					alt="Pipe Top"

@@ -323,6 +323,11 @@ const RegistrationForm = () => {
 			className="min-h-screen relative overflow-hidden flex items-center justify-center py-6 sm:py-8 lg:py-20 px-4 sm:px-6 lg:px-24"
 			style={{ backgroundColor: '#33a1fd' }}>
 			<style jsx>{`
+				@font-face {
+					font-family: 'SuperMario256';
+					src: url('/SuperMario256.ttf') format('truetype');
+					font-display: swap;
+				}
 				input::placeholder,
 				select {
 					color: #6b7280;
@@ -386,6 +391,52 @@ const RegistrationForm = () => {
 
 			{/* Main Content */}
 			<div className="text-center z-20 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl px-2 sm:px-4 -mt-8 sm:-mt-12 md:-mt-16">
+				{/* Mario-styled heading above the form */}
+				<div className="flex justify-center pt-6 sm:pt-8 md:pt-8 lg:pt-8 mb-6 sm:mb-10 md:mb-12">
+					<div className="text-center z-20">
+						<h1
+							style={{
+								fontFamily: 'SuperMario256, Arial, sans-serif',
+								fontSize: 'clamp(2.2rem, 6vw, 4.5rem)',
+								WebkitTextStroke: 'min(2vw, 3px) #000',
+								margin: 0,
+								display: 'flex',
+								justifyContent: 'center',
+								lineHeight: 1.1,
+								wordBreak: 'break-word',
+								whiteSpace: 'nowrap',
+								overflowX: 'auto',
+							}}
+							className="mx-auto heading-responsive">
+							<span
+								style={{
+									color: '#D42000',
+									textShadow:
+										'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+									marginRight: '0.3em',
+								}}>
+								FILL
+							</span>
+							<span
+								style={{
+									color: '#47A63E',
+									textShadow:
+										'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+									marginRight: '0.3em',
+								}}>
+								THE
+							</span>
+							<span
+								style={{
+									color: '#ffe600',
+									textShadow:
+										'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+								}}>
+								FORM
+							</span>
+						</h1>
+					</div>
+				</div>
 				<div className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto">
 					<div className="bg-gradient-to-b from-yellow-300 to-yellow-500 rounded-lg border-2 sm:border-3 md:border-4 border-black shadow-xl sm:shadow-2xl p-3 sm:p-4 md:p-5">
 						<form
@@ -567,6 +618,36 @@ const RegistrationForm = () => {
 						</form>
 					</div>
 				</div>
+			</div>
+			{/* Question Blocks - Left and Right, closer together - Hidden on mobile */}
+			<div
+				className="absolute left-20 w-16 h-16 z-20 hidden md:block"
+				style={{ bottom: '300px' }}>
+				<Image
+					src="/block_question.png"
+					alt="Question Block"
+					fill
+					className="object-contain hover:scale-110 transition-transform cursor-pointer"
+				/>
+			</div>
+			<div
+				className="absolute w-16 h-16 z-20 hidden md:block"
+				style={{ bottom: '300px', right: '288px' }}>
+				<Image
+					src="/block_question-2.png"
+					alt="Question Block"
+					fill
+					className="object-contain hover:scale-110 transition-transform cursor-pointer"
+				/>
+			</div>
+			<div className="absolute bottom-0 right-2 w-24 sm:w-28 md:w-36 z-10 flex items-end h-64 sm:h-72 md:h-80">
+				<Image
+					src="/flag.png"
+					alt="Flag"
+					width={220}
+					height={630}
+					className="object-contain h-full w-auto"
+				/>
 			</div>
 
 			{/* Toast Notifications */}
