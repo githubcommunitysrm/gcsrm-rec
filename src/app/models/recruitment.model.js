@@ -24,31 +24,27 @@ const participantSchema = new mongoose.Schema({
 		required: true,
 	},
 	domain: {
-		type: String, //Map,
-		// of: {
-		//     type: [String],
-		//     maxlength: 2
-		// },
+		type: String,
 		required: true,
 	},
-	// degreeWithBranch: {
-	//     type: String,
-	//     required: true
-	// },
-	// links: {
-	//     github: {
-	//         type: String,
-	//         default: null
-	//     },
-	//     demo: {
-	//         type: String,
-	//         default: null
-	//     },
-	//     deployment: {
-	//         type: String,
-	//         default: null
-	//     }
-	// },
+	degreeWithBranch: {
+		type: String,
+		required: true,
+	},
+	links: {
+		github: {
+			type: String,
+			default: null,
+		},
+		demo: {
+			type: String,
+			default: null,
+		},
+		deployment: {
+			type: String,
+			default: null,
+		},
+	},
 	status: {
 		type: String,
 		enum: [

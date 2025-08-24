@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import Image from 'next/image';
 
 const RegistrationForm = () => {
 	const [formData, setFormData] = useState({
@@ -16,7 +18,6 @@ const RegistrationForm = () => {
 
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [errors, setErrors] = useState({});
-	const [message, setMessage] = useState('');
 
 	// Pre-fill domain if selected from domain page
 	useEffect(() => {
@@ -30,14 +31,11 @@ const RegistrationForm = () => {
 		}
 	}, []);
 
-	const subdomainOptions = {
-		// Removed subdomain options as per request
-	};
-
 	const validateForm = () => {
 		const newErrors = {};
-		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+		const emailRegex = /^[a-zA-Z]{2}\d{4}@srmist\.edu\.in$/;
 		const phoneRegex = /^\d{10}$/;
+		const raRegex = /^RA\w{13}$/;
 
 		if (!formData.name.trim()) newErrors.name = 'Name is required!';
 		if (!formData.phone.trim()) {
@@ -48,13 +46,16 @@ const RegistrationForm = () => {
 		if (!formData.email.trim()) {
 			newErrors.email = 'Email address is required!';
 		} else if (!emailRegex.test(formData.email.trim())) {
-			newErrors.email = 'Please enter a valid email address';
+			newErrors.email = 'Please enter a SRM email address';
 		}
-		if (!formData.registrationNumber.trim())
+		if (!formData.registrationNumber.trim()) {
 			newErrors.registrationNumber = 'Registration number is required!';
+		} else if (!raRegex.test(formData.registrationNumber.trim())) {
+			newErrors.registrationNumber =
+				'Please enter a valid registration number (Format: RA24XXXXXXXX or RA25XXXXXXXX)!';
+		}
 		if (!formData.year) newErrors.year = 'Please select your college year!';
 		if (!formData.domain) newErrors.domain = 'Please choose your domain!';
-		// Removed subdomain validation
 
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
@@ -65,7 +66,6 @@ const RegistrationForm = () => {
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
-			// Removed subdomain reset logic
 		}));
 
 		if (errors[name]) {
@@ -79,10 +79,12 @@ const RegistrationForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		if (!validateForm()) return;
+		if (!validateForm()) {
+			toast.error('Please fix the errors before submitting!');
+			return;
+		}
 
 		setIsSubmitting(true);
-		setMessage('');
 
 		try {
 			const response = await fetch('/api/register', {
@@ -94,8 +96,17 @@ const RegistrationForm = () => {
 			const result = await response.json();
 
 			if (response.ok) {
-				setMessage(
-					`🎉 Welcome to GCSRM, ${formData.name}! 🎉\n\nDomain: ${formData.domain}\nYear: ${formData.year}\nEmail: ${formData.email}\n\nYour adventure begins now! 🚀`
+				toast.success(
+					`🎉 Welcome to GCSRM, ${formData.name}! Your adventure begins now! 🚀`,
+					{
+						duration: 6000,
+						style: {
+							background: '#10b981',
+							color: '#fff',
+							fontSize: '16px',
+							fontWeight: 'bold',
+						},
+					}
 				);
 				setFormData({
 					name: '',
@@ -104,14 +115,27 @@ const RegistrationForm = () => {
 					registrationNumber: '',
 					year: '',
 					degree: '',
-					subdomain: '',
 					email: '',
 				});
 			} else {
-				setMessage(`❌ Error: ${result.error}`);
+				toast.error(`Registration failed: ${result.error}`, {
+					duration: 5000,
+					style: {
+						background: '#ef4444',
+						color: '#fff',
+						fontSize: '16px',
+					},
+				});
 			}
 		} catch (error) {
-			setMessage('❌ Network error. Please try again.');
+			toast.error('Network error. Please try again.', {
+				duration: 5000,
+				style: {
+					background: '#ef4444',
+					color: '#fff',
+					fontSize: '16px',
+				},
+			});
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -149,6 +173,24 @@ const RegistrationForm = () => {
 				.animate-gentle-float {
 					animation: gentleFloat 8s ease-in-out infinite;
 				}
+				@keyframes cloudFloat {
+					0% {
+						transform: translateY(0);
+					}
+					50% {
+						transform: translateY(-18px);
+					}
+					100% {
+						transform: translateY(0);
+					}
+				}
+				.cloud-float {
+					animation: cloudFloat 4s ease-in-out infinite;
+				}
+				.cloud-float-delayed {
+					animation: cloudFloat 4s ease-in-out infinite;
+					animation-delay: 2s;
+				}
 				input,
 				select,
 				button {
@@ -157,14 +199,22 @@ const RegistrationForm = () => {
 				}
 			`}</style>
 
-			{/* Floating Clouds */}
-			<div className="absolute top-8 left-8 w-24 h-16 opacity-40 animate-gentle-float hidden sm:block">
-				<div className="w-full h-full bg-white/30 rounded-full"></div>
+			{/* Floating Clouds - Responsive positioning with better mobile spacing */}
+			<div className="absolute top-8 left-2 sm:top-12 sm:left-8 md:top-16 md:left-16 w-32 sm:w-40 md:w-48 h-20 sm:h-26 md:h-32 opacity-90 cloud-float">
+				<Image
+					src="/cloud-1.png"
+					alt="Cloud"
+					fill
+					className="object-contain"
+				/>
 			</div>
-			<div
-				className="absolute top-12 right-12 w-28 h-18 opacity-40 animate-gentle-float hidden sm:block"
-				style={{ animationDelay: '2s' }}>
-				<div className="w-full h-full bg-white/30 rounded-full"></div>
+			<div className="absolute top-12 right-2 sm:top-18 sm:right-12 md:top-24 md:right-20 w-36 sm:w-44 md:w-52 h-24 sm:h-30 md:h-36 opacity-90 cloud-float-delayed">
+				<Image
+					src="/cloud-2.png"
+					alt="Cloud"
+					fill
+					className="object-contain"
+				/>
 			</div>
 
 			{/* Main Content */}
@@ -351,23 +401,42 @@ const RegistrationForm = () => {
 				</div>
 			</div>
 
-			{/* Success/Error Message Modal */}
-			{message && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-					<div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-						<div className="text-center">
-							<pre className="whitespace-pre-wrap text-sm text-gray-800 mb-4">
-								{message}
-							</pre>
-							<button
-								onClick={() => setMessage('')}
-								className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors">
-								Close
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
+			{/* Toast Notifications */}
+			<Toaster
+				position="top-center"
+				reverseOrder={false}
+				gutter={8}
+				containerClassName=""
+				containerStyle={{}}
+				toastOptions={{
+					// Define default options
+					className: '',
+					duration: 4000,
+					style: {
+						background: '#363636',
+						color: '#fff',
+						fontSize: '16px',
+						fontWeight: '600',
+						borderRadius: '8px',
+						boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+					},
+					// Default options for specific types
+					success: {
+						duration: 6000,
+						iconTheme: {
+							primary: '#10b981',
+							secondary: '#fff',
+						},
+					},
+					error: {
+						duration: 5000,
+						iconTheme: {
+							primary: '#ef4444',
+							secondary: '#fff',
+						},
+					},
+				}}
+			/>
 
 			{/* Bottom Brick Ground */}
 			<div
