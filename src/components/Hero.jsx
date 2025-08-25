@@ -10,8 +10,8 @@ const HeroSection = () => {
   const [isWindowClosed, setIsWindowClosed] = useState(false);
   const [showPalmTree, setShowPalmTree] = useState(true);
 
-  const startDate = new Date(2025, 7, 29, 0, 0, 0);
-  const endDate = new Date(2025, 7, 30, 23, 59, 59);
+  const startDate = new Date(2025, 7, 25, 0, 0, 0); // August 25, 2025 at 00:00:00
+  const endDate = new Date(2025, 7, 29, 23, 59, 59); // August 29, 2025 at 23:59:59
 
   const totalSecondsWindow = Math.max(1, Math.floor((endDate.getTime() - startDate.getTime()) / 1000));
   const elapsedSeconds = Math.max(0, Math.floor((now.getTime() - startDate.getTime()) / 1000));
@@ -21,14 +21,14 @@ const HeroSection = () => {
     const handleScroll = () => {
       const domainsSection = document.getElementById('domains-section');
       const heroSection = document.getElementById('hero-section');
-      
+
       if (domainsSection) {
         const domainRect = domainsSection.getBoundingClientRect();
         if (domainRect.top < window.innerHeight && domainRect.bottom > 0) {
           setShowFallingBoss(true);
         }
       }
-      
+
       if (heroSection) {
         const heroRect = heroSection.getBoundingClientRect();
         setShowPalmTree(heroRect.bottom > 0);
@@ -66,7 +66,7 @@ const HeroSection = () => {
 
   return (
     <div id="hero-section" className="h-screen relative overflow-hidden flex items-center justify-center" style={{ backgroundColor: '#33a1fd' }}>
-      
+
       {/* Custom CSS for character animations */}
       <style jsx>{`
         @font-face {
@@ -145,7 +145,7 @@ const HeroSection = () => {
           animation: fallingBoss 2s ease-in forwards;
         }
       `}</style>
-      
+
       {/* Floating Clouds - Responsive positioning with better mobile spacing */}
       <div className="absolute top-8 left-2 sm:top-12 sm:left-8 md:top-16 md:left-16 w-32 sm:w-40 md:w-48 h-20 sm:h-26 md:h-32 opacity-90 cloud-float">
         <Image src="/cloud-1.png" alt="Cloud" fill className="object-contain" />
@@ -156,7 +156,7 @@ const HeroSection = () => {
 
       {/* Main Content */}
       <div className="text-center z-20 px-4 -mt-32">
-        
+
         {/* Main RECRUITMENTS OPEN Heading with Super Mario Font and colored segments */}
         <div className="mb-1" style={{ width: '100%', maxWidth: '100vw', overflowX: 'auto' }}>
           <h1
@@ -212,7 +212,7 @@ const HeroSection = () => {
 
         {/* Direct Registration Button with Timer */}
         <div className="relative mb-12 mt-8">
-          <button 
+          <button
             onClick={() => {
               if (!isTimerExpired) {
                 const registrationSection = document.getElementById('registration-section');
@@ -220,14 +220,13 @@ const HeroSection = () => {
               }
             }}
             disabled={isTimerExpired}
-            className={`relative overflow-hidden font-bold py-4 px-8 text-xl rounded border-4 border-black shadow-2xl transform transition-all duration-300 ${
-              isTimerExpired 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 hover:scale-105'
-            }`}
+            className={`relative overflow-hidden font-bold py-4 px-8 text-xl rounded border-4 border-black shadow-2xl transform transition-all duration-300 ${isTimerExpired
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 hover:scale-105'
+              }`}
             style={{ fontFamily: 'Arial Black, sans-serif' }}
           >
-            
+
             <span className={`flex items-center space-x-2 ${isTimerExpired ? 'text-gray-600' : 'text-black'}`}>
               <span className="text-2xl">{isTimerExpired ? '⏰' : ''}</span>
               <span className="flex flex-col items-center">
@@ -274,18 +273,18 @@ const HeroSection = () => {
       <div className="absolute bottom-16 left-1/3 w-20 h-24 z-30 mario-animate">
         <Image src="/char_mario_sm-idle.png" alt="Mario" fill className="object-contain" />
       </div>
-      
+
       {/* Spike on Brick Ground */}
       <div className="absolute bottom-16 left-1/2 w-12 h-16 z-25 transform -translate-x-1/2">
         <Image src="/spike.png" alt="Spike" fill className="object-contain" />
       </div>
-      
+
       <div className="absolute bottom-16 right-1/3 w-24 h-28 z-30 bowser-animate">
         <Image src="/boss.png" alt="Bowser" fill className="object-contain" />
       </div>
 
       {/* Bottom Brick Ground */}
-      <div 
+      <div
         className="absolute bottom-0 left-0 right-0 h-16 z-5"
         style={{
           backgroundImage: 'url(/block_textured.png)',
