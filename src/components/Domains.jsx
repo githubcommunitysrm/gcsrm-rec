@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const Domain = () => {
 	return (
-		<div className="relative min-h-screen bg-gradient-to-b from-sky-400 to-blue-500 overflow-hidden pt-52">
+		<div className="relative min-h-screen bg-gradient-to-b from-sky-400 to-blue-500 overflow-hidden pt-28">
 			<style jsx>{`
 				@font-face {
 					font-family: 'SuperMario256';
@@ -61,40 +61,71 @@ const Domain = () => {
 							fontSize: 'clamp(2.5rem, 6vw, 5rem)',
 							WebkitTextStroke: 'min(2vw, 3px) #000',
 							margin: 0,
-							display: 'flex',
-							justifyContent: 'center',
 							lineHeight: 1.1,
-							wordBreak: 'break-word',
-							whiteSpace: 'nowrap',
-							overflowX: 'auto',
 						}}
 						className="mx-auto heading-responsive">
-						<span
-							style={{
-								color: '#D42000',
-								textShadow:
-									'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
-								marginRight: '0.3em',
-							}}>
-							CHOOSE
-						</span>
-						<span
-							style={{
-								color: '#47A63E',
-								textShadow:
-									'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
-								marginRight: '0.3em',
-							}}>
-							YOUR
-						</span>
-						<span
-							style={{
-								color: '#ffe600',
-								textShadow:
-									'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
-							}}>
-							PATH
-						</span>
+						{/* Mobile layout: Choose your / Path */}
+						<div className="block sm:hidden">
+							<div className="flex justify-center">
+								<span
+									style={{
+										color: '#D42000',
+										textShadow:
+											'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+										marginRight: '0.3em',
+									}}>
+									CHOOSE
+								</span>
+								<span
+									style={{
+										color: '#47A63E',
+										textShadow:
+											'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+									}}>
+									YOUR
+								</span>
+							</div>
+							<div className="flex justify-center">
+								<span
+									style={{
+										color: '#ffe600',
+										textShadow:
+											'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+									}}>
+									PATH
+								</span>
+							</div>
+						</div>
+
+						{/* Desktop layout: Choose Your Path */}
+						<div className="hidden sm:flex justify-center">
+							<span
+								style={{
+									color: '#D42000',
+									textShadow:
+										'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+									marginRight: '0.3em',
+								}}>
+								CHOOSE
+							</span>
+							<span
+								style={{
+									color: '#47A63E',
+									textShadow:
+										'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+									marginRight: '0.3em',
+								}}>
+								YOUR
+							</span>
+							<span
+								style={{
+									color: '#ffe600',
+									textShadow:
+										'4px 4px 0 #3b3b3b, 8px 8px 0 #E67A00',
+								}}>
+								PATH
+							</span>
+						</div>
 					</h1>
 				</div>
 			</div>
