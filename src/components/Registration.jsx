@@ -19,6 +19,20 @@ const RegistrationForm = () => {
 
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [errors, setErrors] = useState({});
+	const [now, setNow] = useState(() => new Date());
+
+	const startDate = new Date(2025, 7, 25, 0, 0, 0); // August 25, 2025 at 00:00:00
+	const endDate = new Date(2025, 7, 29, 23, 59, 59); // August 29, 2025 at 23:59:59
+
+	// Check if registration is closed
+	const isRegistrationClosed = now.getTime() > endDate.getTime();
+	const isRegistrationOpen = now.getTime() >= startDate.getTime() && now.getTime() <= endDate.getTime();
+
+	// Update current time every second
+	useEffect(() => {
+		const timer = setInterval(() => setNow(new Date()), 1000);
+		return () => clearInterval(timer);
+	}, []);
 
 	// Mario-themed confetti function
 	const fireMarioConfetti = () => {
@@ -166,6 +180,19 @@ const RegistrationForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		if (isRegistrationClosed || !isRegistrationOpen) {
+			toast.error('Registration period has ended!', {
+				duration: 5000,
+				style: {
+					background: '#ef4444',
+					color: '#fff',
+					fontSize: '16px',
+				},
+			});
+			return;
+		}
+
+
 		if (!validateForm()) {
 			toast.error(getValidationErrorMessage(), {
 				duration: 4000,
@@ -210,10 +237,28 @@ const RegistrationForm = () => {
 		);
 
 		try {
+			// Double-check on server side as well
+			const currentTime = new Date().getTime();
+			if (currentTime > endDate.getTime()) {
+				toast.error('Registration period has ended!', {
+					duration: 5000,
+					style: {
+						background: '#ef4444',
+						color: '#fff',
+						fontSize: '16px',
+					},
+				});
+				setIsSubmitting(false);
+				return;
+			}
+
 			const response = await fetch('/api/register', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(formData),
+				body: JSON.stringify({
+					...formData,
+					submissionTime: currentTime, // Send timestamp for server validation
+				}),
 			});
 
 			const result = await response.json();
@@ -309,12 +354,10 @@ const RegistrationForm = () => {
 	};
 
 	const inputClasses = (fieldName, hasValue = false) =>
-		`w-full px-2 sm:px-3 py-2 sm:py-2.5 text-sm sm:text-base border-2 sm:border-3 rounded focus:outline-none focus:ring-2 transition-all ${
-			hasValue ? 'text-black' : 'text-gray-500'
-		} ${
-			errors[fieldName]
-				? 'border-red-500 focus:ring-red-400'
-				: 'border-black focus:ring-blue-400'
+		`w-full px-2 sm:px-3 py-2 sm:py-2.5 text-sm sm:text-base border-2 sm:border-3 rounded focus:outline-none focus:ring-2 transition-all ${hasValue ? 'text-black' : 'text-gray-500'
+		} ${errors[fieldName]
+			? 'border-red-500 focus:ring-red-400'
+			: 'border-black focus:ring-blue-400'
 		}`;
 
 	return (
@@ -438,185 +481,210 @@ const RegistrationForm = () => {
 					</div>
 				</div>
 				<div className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto">
-					<div className="bg-gradient-to-b from-yellow-300 to-yellow-500 rounded-lg border-2 sm:border-3 md:border-4 border-black shadow-xl sm:shadow-2xl p-3 sm:p-4 md:p-5">
-						<form
-							onSubmit={handleSubmit}
-							className="space-y-2 sm:space-y-3">
-							{/* Name Field */}
-							<div>
-								<input
-									type="text"
-									name="name"
-									value={formData.name}
-									onChange={handleChange}
-									required
-									className={inputClasses(
-										'name',
-										formData.name
-									)}
-									placeholder="Enter your full name"
-								/>
-								{errors.name && (
-									<p className="text-red-600 text-xs font-bold mt-1">
-										❌ {errors.name}
-									</p>
-								)}
+					{isRegistrationClosed ? (
+						/* Registration Closed Message */
+						<div className="bg-gradient-to-b from-gray-400 to-gray-600 rounded-lg border-2 sm:border-3 md:border-4 border-black shadow-xl sm:shadow-2xl p-6 sm:p-8 md:p-10">
+							<div className="text-center">
+								<div className="text-4xl mb-4">⏰</div>
+								<h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4" style={{ fontFamily: 'Arial Black, sans-serif' }}>
+									REGISTRATION CLOSED!
+								</h2>
+								<p className="text-white text-sm sm:text-base mb-4">
+									The registration period ended on August 29, 2025 at 23:59:59
+								</p>
+								<p className="text-gray-200 text-xs sm:text-sm">
+									Thank you for your interest in GitHub Community SRM!
+								</p>
 							</div>
-
-							{/* Phone Field */}
-							<div>
-								<input
-									type="tel"
-									name="phone"
-									value={formData.phone}
-									onChange={handleChange}
-									required
-									className={inputClasses(
-										'phone',
-										formData.phone
+						</div>
+					) : (
+						/* Registration Form */
+						<div className={`bg-gradient-to-b from-yellow-300 to-yellow-500 rounded-lg border-2 sm:border-3 md:border-4 border-black shadow-xl sm:shadow-2xl p-3 sm:p-4 md:p-5 ${!isRegistrationOpen ? 'opacity-50 pointer-events-none' : ''}`}>
+							<form
+								onSubmit={handleSubmit}
+								className="space-y-2 sm:space-y-3">
+								{/* Name Field */}
+								<div>
+									<input
+										type="text"
+										name="name"
+										value={formData.name}
+										onChange={handleChange}
+										required
+										disabled={!isRegistrationOpen}
+										className={inputClasses(
+											'name',
+											formData.name
+										)}
+										placeholder="Enter your full name"
+									/>
+									{errors.name && (
+										<p className="text-red-600 text-xs font-bold mt-1">
+											❌ {errors.name}
+										</p>
 									)}
-									placeholder="Enter your phone number"
-								/>
-								{errors.phone && (
-									<p className="text-red-600 text-xs font-bold mt-1">
-										❌ {errors.phone}
-									</p>
-								)}
-							</div>
+								</div>
 
-							{/* Email Field */}
-							<div>
-								<input
-									type="email"
-									name="email"
-									value={formData.email}
-									onChange={handleChange}
-									required
-									className={inputClasses(
-										'email',
-										formData.email
+								{/* Phone Field */}
+								<div>
+									<input
+										type="tel"
+										name="phone"
+										value={formData.phone}
+										onChange={handleChange}
+										required
+										disabled={!isRegistrationOpen}
+										className={inputClasses(
+											'phone',
+											formData.phone
+										)}
+										placeholder="Enter your phone number"
+									/>
+									{errors.phone && (
+										<p className="text-red-600 text-xs font-bold mt-1">
+											❌ {errors.phone}
+										</p>
 									)}
-									placeholder="Enter your email address"
-								/>
-								{errors.email && (
-									<p className="text-red-600 text-xs font-bold mt-1">
-										❌ {errors.email}
-									</p>
-								)}
-							</div>
+								</div>
 
-							{/* Degree Field */}
-							<div>
-								<input
-									type="text"
-									name="degreeWithBranch"
-									value={formData.degreeWithBranch}
-									onChange={handleChange}
-									required
-									className={inputClasses(
-										'degreeWithBranch',
-										formData.degreeWithBranch
+								{/* Email Field */}
+								<div>
+									<input
+										type="email"
+										name="email"
+										value={formData.email}
+										onChange={handleChange}
+										required
+										disabled={!isRegistrationOpen}
+										className={inputClasses(
+											'email',
+											formData.email
+										)}
+										placeholder="Enter your email address"
+									/>
+									{errors.email && (
+										<p className="text-red-600 text-xs font-bold mt-1">
+											❌ {errors.email}
+										</p>
 									)}
-									placeholder="Degree with Branch (e.g. B.Tech - CSE)"
-								/>
-								{errors.degreeWithBranch && (
-									<p className="text-red-600 text-xs font-bold mt-1">
-										❌ {errors.degreeWithBranch}
-									</p>
-								)}
-							</div>
+								</div>
 
-							{/* Registration Number Field */}
-							<div>
-								<input
-									type="text"
-									name="registrationNumber"
-									value={formData.registrationNumber}
-									onChange={handleChange}
-									required
-									className={inputClasses(
-										'registrationNumber',
-										formData.registrationNumber
+								{/* Degree Field */}
+								<div>
+									<input
+										type="text"
+										name="degreeWithBranch"
+										value={formData.degreeWithBranch}
+										onChange={handleChange}
+										required
+										disabled={!isRegistrationOpen}
+										className={inputClasses(
+											'degreeWithBranch',
+											formData.degreeWithBranch
+										)}
+										placeholder="Degree with Branch (e.g. B.Tech - CSE)"
+									/>
+									{errors.degreeWithBranch && (
+										<p className="text-red-600 text-xs font-bold mt-1">
+											❌ {errors.degreeWithBranch}
+										</p>
 									)}
-									placeholder="Enter registration number"
-								/>
-								{errors.registrationNumber && (
-									<p className="text-red-600 text-xs font-bold mt-1">
-										❌ {errors.registrationNumber}
-									</p>
-								)}
-							</div>
+								</div>
 
-							{/* Year Field - Dropdown */}
-							<div>
-								<select
-									name="year"
-									value={formData.year}
-									onChange={handleChange}
-									required
-									className={`w-full px-2 sm:px-3 py-2 sm:py-2.5 text-sm sm:text-base border-2 sm:border-3 rounded focus:outline-none focus:ring-2 transition-all ${
-										errors.year
+								{/* Registration Number Field */}
+								<div>
+									<input
+										type="text"
+										name="registrationNumber"
+										value={formData.registrationNumber}
+										onChange={handleChange}
+										required
+										disabled={!isRegistrationOpen}
+										className={inputClasses(
+											'registrationNumber',
+											formData.registrationNumber
+										)}
+										placeholder="Enter registration number"
+									/>
+									{errors.registrationNumber && (
+										<p className="text-red-600 text-xs font-bold mt-1">
+											❌ {errors.registrationNumber}
+										</p>
+									)}
+								</div>
+
+								{/* Year Field - Dropdown */}
+								<div>
+									<select
+										name="year"
+										value={formData.year}
+										onChange={handleChange}
+										required
+										disabled={!isRegistrationOpen}
+										className={`w-full px-2 sm:px-3 py-2 sm:py-2.5 text-sm sm:text-base border-2 sm:border-3 rounded focus:outline-none focus:ring-2 transition-all ${errors.year
 											? 'border-red-500 focus:ring-red-400'
 											: 'border-black focus:ring-blue-400'
-									}`}
-									style={{ backgroundColor: '#f6c100' }}>
-									<option value="">Select your year</option>
-									<option value="1st Year">1st Year</option>
-									<option value="2nd Year">2nd Year</option>
-								</select>
-								{errors.year && (
-									<p className="text-red-600 text-xs font-bold mt-1">
-										❌ {errors.year}
-									</p>
-								)}
-							</div>
+											} ${!isRegistrationOpen ? 'bg-gray-300 cursor-not-allowed' : ''}`}
+										style={{ backgroundColor: isRegistrationOpen ? '#f6c100' : '#d1d5db' }}>
+										<option value="">Select your year</option>
+										<option value="1st Year">1st Year</option>
+										<option value="2nd Year">2nd Year</option>
+									</select>
+									{errors.year && (
+										<p className="text-red-600 text-xs font-bold mt-1">
+											❌ {errors.year}
+										</p>
+									)}
+								</div>
 
-							{/* Domain Field - Dropdown */}
-							<div>
-								<select
-									name="domain"
-									value={formData.domain}
-									onChange={handleChange}
-									required
-									className={`w-full px-2 sm:px-3 py-2 sm:py-2.5 text-sm sm:text-base border-2 sm:border-3 rounded focus:outline-none focus:ring-2 transition-all ${
-										errors.domain
+								{/* Domain Field - Dropdown */}
+								<div>
+									<select
+										name="domain"
+										value={formData.domain}
+										onChange={handleChange}
+										required
+										disabled={!isRegistrationOpen}
+										className={`w-full px-2 sm:px-3 py-2 sm:py-2.5 text-sm sm:text-base border-2 sm:border-3 rounded focus:outline-none focus:ring-2 transition-all ${errors.domain
 											? 'border-red-500 focus:ring-red-400'
 											: 'border-black focus:ring-blue-400'
-									}`}
-									style={{ backgroundColor: '#f4bb00' }}>
-									<option value="">Select your domain</option>
-									<option value="Technical">Technical</option>
-									<option value="Creative">Creative</option>
-									<option value="Corporate">Corporate</option>
-								</select>
-								{errors.domain && (
-									<p className="text-red-600 text-xs font-bold mt-1">
-										❌ {errors.domain}
-									</p>
-								)}
-							</div>
+											} ${!isRegistrationOpen ? 'bg-gray-300 cursor-not-allowed' : ''}`}
+										style={{ backgroundColor: isRegistrationOpen ? '#f4bb00' : '#d1d5db' }}>
+										<option value="">Select your domain</option>
+										<option value="Technical">Technical</option>
+										<option value="Creative">Creative</option>
+										<option value="Corporate">Corporate</option>
+									</select>
+									{errors.domain && (
+										<p className="text-red-600 text-xs font-bold mt-1">
+											❌ {errors.domain}
+										</p>
+									)}
+								</div>
 
-							{/* Submit Button */}
-							<div className="pt-2">
-								<button
-									type="submit"
-									disabled={isSubmitting}
-									className={`w-full font-bold py-3 sm:py-3.5 px-4 rounded border-2 sm:border-3 border-black shadow-lg transition-all duration-200 text-sm sm:text-base ${
-										isSubmitting
+								{/* Submit Button */}
+								<div className="pt-2">
+									<button
+										type="submit"
+										disabled={isSubmitting || !isRegistrationOpen}
+										className={`w-full font-bold py-3 sm:py-3.5 px-4 rounded border-2 sm:border-3 border-black shadow-lg transition-all duration-200 text-sm sm:text-base ${isSubmitting || !isRegistrationOpen
 											? 'bg-gray-400 cursor-not-allowed'
 											: 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 active:scale-95 transform hover:scale-105'
-									}`}
-									style={{
-										fontFamily: 'Arial Black, sans-serif',
-										minHeight: '44px',
-									}}>
-									{isSubmitting
-										? ' LOADING ADVENTURE...'
-										: ' START MY QUEST!'}
-								</button>
-							</div>
-						</form>
-					</div>
+											}`}
+										style={{
+											fontFamily: 'Arial Black, sans-serif',
+											minHeight: '44px',
+										}}>
+										{!isRegistrationOpen
+											? 'REGISTRATION CLOSED'
+											: isSubmitting
+												? ' LOADING ADVENTURE...'
+												: ' START MY QUEST!'}
+									</button>
+								</div>
+							</form>
+						</div>
+					)}
 				</div>
 			</div>
 			{/* Question Blocks - Left and Right, closer together - Hidden on mobile */}
