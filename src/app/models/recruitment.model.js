@@ -57,10 +57,11 @@ const participantSchema = new mongoose.Schema({
 	},
 });
 
-const ParticipantUser = mongoose.model(
-	'ParticipantUser',
-	participantSchema,
-	'recruitment25'
-);
+// const ParticipantUser = mongoose.model(
+// 	'ParticipantUser',
+// 	participantSchema,
+// 	'recruitment25'
+// );
+const ParticipantUser = mongoose.models.recruitment25 || mongoose.model("recruitment25", participantSchema);
 
 export default ParticipantUser;
