@@ -21,22 +21,20 @@ const taskSchema = new mongoose.Schema({
         enum: ["Technical", "Creatives", "Corporate"],
         required: true
     },
-    subdomain: {
-        type: String,
-        enum: [
-            "AIML", "Web-Dev", "CP", "App-dev", "Frontend", "Backend", "Full-stack",
-            "GD", "VFX", " "
-        ],
-        required: true
-    },
+    // subdomain: {
+    //     type: String,
+    //     enum: [
+    //         "AIML", "Web-Dev", "GFX", "VFX", " "
+    //     ],
+    //     required: true
+    // },
     taskType: {
         type: String,
-        enum: ["Frontend", "Backend", "Full-stack", "AIML", "CP", "App-dev", "GD", "VFX"],
         required: true
     },
     year: {
         type: String,
-        enum: ["1st", "2nd"],
+        enum: ["1st", "2nd", "both"],
         required: true
     },
     deadline: {
@@ -45,6 +43,6 @@ const taskSchema = new mongoose.Schema({
     },
 });
 
-const Task = mongoose.models.tasks || mongoose.model("tasks", taskSchema);
+const Task = mongoose.models.tasks25 || mongoose.model("tasks25", taskSchema);
 
 module.exports = Task;
