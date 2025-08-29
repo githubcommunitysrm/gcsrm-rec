@@ -42,28 +42,40 @@ export async function GET(request) {
                     year.includes("4th") ? "4th" : year;
 
         // Handle the domain as a string (from your MongoDB structure)
+        console.log("Participant domain:", domain);
+        console.log("Participant year:", year, "extracted year:", yearNumber);
+
+        // First, let's check what tasks exist in the database
+        const allTasks = await Task.find({});
+        console.log("All tasks in database:", allTasks.map(t => ({
+            title: t.title,
+            domain: t.domain,
+            year: t.year,
+            taskType: t.taskType
+        })));
+
+        // Build flexible queries to handle domain variations
+        const domainVariations = [];
         if (domain === "Corporate") {
-            taskQueries.push({
-                domain: domain,
-                $or: [
-                    { year: year },         // Exact year match (e.g., "2nd Year")
-                    { year: yearNumber },   // Year number match (e.g., "2nd")
-                    { year: "both" }        // Tasks for all years
-                ]
-            });
+            domainVariations.push("Corporate");
+        } else if (domain === "Creative" || domain === "Creatives") {
+            domainVariations.push("Creative", "Creatives");
+        } else if (domain === "Technical") {
+            domainVariations.push("Technical");
         } else {
-            // For Technical and Creatives domains, we need to find tasks for that domain
-            taskQueries.push({
-                domain: domain,
-                $or: [
-                    { year: year },         // Exact year match (e.g., "2nd Year")
-                    { year: yearNumber },   // Year number match (e.g., "2nd")
-                    { year: "both" }        // Tasks for all years
-                ]
-            });
+            domainVariations.push(domain);
         }
 
-        if (taskQueries.length === 0) {
+        console.log("Domain variations to search:", domainVariations);
+
+        taskQueries.push({
+            domain: { $in: domainVariations },
+            $or: [
+                { year: year },         // Exact year match (e.g., "2nd Year")
+                { year: yearNumber },   // Year number match (e.g., "2nd")
+                { year: "both" }        // Tasks for all years
+            ]
+        }); if (taskQueries.length === 0) {
             return NextResponse.json({
                 name,
                 regNo,
@@ -78,9 +90,16 @@ export async function GET(request) {
         }
 
         // Fetch tasks based on the query
+        console.log("Task queries:", JSON.stringify(taskQueries, null, 2));
+
         let tasks = await Task.find({
             $or: taskQueries
-        });        // Clean each task before sending it to the client
+        });
+
+        console.log("Found tasks count:", tasks.length);
+        console.log("Tasks found:", tasks.map(t => ({ title: t.title, domain: t.domain, year: t.year })));
+
+        // Clean each task before sending it to the client
         tasks = tasks.map(cleanTaskData);
 
         return NextResponse.json({

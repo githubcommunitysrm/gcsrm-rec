@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --gradient-blue-purple: linear-gradient(0deg, #bc00b7, #23b2ff);
+  --gradient-blue-purple-horiz: linear-gradient(90deg, #bc00b7, #23b2ff);
+  --gradient-lime: linear-gradient(223deg, #00abbc, #3fe049);
 }
 
 @theme inline {

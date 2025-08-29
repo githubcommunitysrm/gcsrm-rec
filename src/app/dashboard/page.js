@@ -343,10 +343,20 @@ const Dashboard = () => {
                     </div>
                 </div>
             )}
-
-            {/* Main content */}
             {participantData ? (
-                <div className="relative min-h-screen" style={{ backgroundColor: '#33a1fd' }}>
+                <div className="relative min-h-screen" style={{
+                    background: 'var(--gradient-blue-purple)'
+                }}>
+                    <div
+                        className="absolute inset-0"
+                        style={{
+                            backgroundImage: 'url(/pattern-logos-characters.png)',
+                            backgroundRepeat: 'repeat',
+                            backgroundSize: '1000px 1000px',
+                            backgroundPosition: '0 0',
+                            opacity: 0.4
+                        }}
+                    />
                     {/* Mario Sky Background with Clouds */}
                     <div className="absolute top-8 left-8 w-24 h-16 opacity-70 animate-pulse">
                         <Image src="/cloud-1.png" alt="Cloud" fill className="object-contain" />
@@ -398,10 +408,10 @@ const Dashboard = () => {
                             boxShadow: '0 0 20px rgba(255, 230, 0, 0.8), inset 0 4px 8px rgba(255, 255, 255, 0.3)'
                         }}>
                             <div className="absolute -top-4 left-4 w-8 h-8">
-                                <Image src="/coin.png" alt="Coin" fill className="object-contain animate-spin" />
+                                <Image src="/coin.png" alt="Coin" fill className="object-contain" />
                             </div>
                             <div className="absolute -top-4 right-4 w-8 h-8">
-                                <Image src="/coin.png" alt="Coin" fill className="object-contain animate-spin" style={{ animationDelay: '0.5s' }} />
+                                <Image src="/coin.png" alt="Coin" fill className="object-contain" style={{ animationDelay: '0.5s' }} />
                             </div>
 
                             <h3 className="text-xl font-bold text-black mb-4 text-center" style={{
@@ -417,7 +427,7 @@ const Dashboard = () => {
                                 </p>
                                 <div className="mt-4 p-3 bg-green-100 rounded-lg border-2 border-green-500">
                                     <p className="text-lg font-bold text-center">
-                                        🎯 For any queries, reach us on{" "}
+                                        For any queries, reach us on{" "}
                                         <a
                                             href="https://discord.gg/Ek2FKk855n"
                                             target="_blank"
@@ -426,7 +436,7 @@ const Dashboard = () => {
                                         >
                                             Discord
                                         </a>
-                                        {" "}🎯
+                                        {" "}
                                     </p>
                                 </div>
                             </div>
@@ -440,8 +450,8 @@ const Dashboard = () => {
                                         <button
                                             key={type}
                                             className={`px-6 py-3 rounded-lg border-4 border-black font-bold text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 ${selectedTaskType === type
-                                                    ? "bg-gradient-to-b from-green-400 to-green-600 text-black shadow-lg"
-                                                    : "bg-gradient-to-b from-red-400 to-red-600 text-black hover:from-red-500 hover:to-red-700"
+                                                ? "bg-gradient-to-b from-green-400 to-green-600 text-black shadow-lg"
+                                                : "bg-gradient-to-b from-red-400 to-red-600 text-black hover:from-red-500 hover:to-red-700"
                                                 }`}
                                             onClick={() => setSelectedTaskType(type)}
                                             style={{
@@ -468,8 +478,9 @@ const Dashboard = () => {
                         </div>
 
                         {/* Mario-styled Submit Button */}
+{/*                         
                         <div className="relative mb-8 z-50">
-                            {/* Power-up decorations around the button */}
+                            {/* Power-up decorations around the button 
                             <div className="absolute -top-8 -left-8 w-12 h-12 animate-bounce">
                                 <Image src="/item_star.png" alt="Star" fill className="object-contain" />
                             </div>
@@ -490,7 +501,8 @@ const Dashboard = () => {
                             >
                                 🎯 {getSubmitButtonText(participantData.domain)} 🎯
                             </a>
-                        </div>
+                        </div> 
+        */}
 
                         {/* Decorative pipes at bottom */}
                         <div className="absolute bottom-24 left-4 w-16 h-24 hidden lg:block">
@@ -504,7 +516,7 @@ const Dashboard = () => {
                         <div className="absolute top-60 left-10 w-8 h-8 animate-spin hidden md:block">
                             <Image src="/coin.png" alt="Coin" fill className="object-contain" />
                         </div>
-                        <div className="absolute top-80 right-16 w-8 h-8 animate-spin hidden md:block" style={{ animationDelay: '1s' }}>
+                        <div className="absolute top-80 right-16 w-8 h-8 hidden md:block" style={{ animationDelay: '1s' }}>
                             <Image src="/coin.png" alt="Coin" fill className="object-contain" />
                         </div>
                     </div>
