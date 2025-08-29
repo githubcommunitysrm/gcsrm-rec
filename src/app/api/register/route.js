@@ -9,7 +9,7 @@ export async function POST(req) {
 		// Server-side registration period validation
 		const now = new Date();
 		const startDate = new Date(2025, 7, 25, 0, 0, 0); // August 25, 2025 at 00:00:00
-		const endDate = new Date(2025, 7, 29, 23, 59, 59); // August 29, 2025 at 23:59:59
+		const endDate = new Date(2025, 7, 30, 23, 59, 59); // August 29, 2025 at 23:59:59
 
 		// Check if registration period is active
 		if (now.getTime() < startDate.getTime()) {
