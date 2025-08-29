@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.3.1",
     "axios": "^1.11.0",
     "canvas-confetti": "^1.9.3",
     "dotenv": "^17.2.1",

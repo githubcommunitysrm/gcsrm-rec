@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
-function TechForm({ participantData = {}, tasks = [] }) {
+function CorpForm({ participantData = {}, tasks = [] }) {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleOpen = () => {
@@ -14,25 +14,16 @@ function TechForm({ participantData = {}, tasks = [] }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const demoVideoInput = event.target.elements.demoVideo.value;
+        const formData = new FormData(event.target);
 
         try {
-            const response = await fetch(demoVideoInput, {
-                method: "HEAD",
-                redirect: "follow"
-            });
-            if (
-                response.url.startsWith("https://accounts.google.com/v3/signin")
-            ) {
-                alert(
-                    "The provided link is not public. Please provide a public link."
-                );
-            } else {
-                // Handle form submission
-                console.log("Form submitted successfully");
-            }
+            // Handle form submission logic here
+            console.log("Corporate form submitted successfully");
+            // You can process the form data here
+            const data = Object.fromEntries(formData);
+            console.log("Form data:", data);
         } catch (error) {
-            alert("There was an error checking the link. Please try again.");
+            alert("There was an error submitting the form. Please try again.");
         }
     };
 
@@ -48,7 +39,7 @@ function TechForm({ participantData = {}, tasks = [] }) {
                     boxShadow: '0 0 25px rgba(255, 230, 0, 0.8), 0 8px 16px rgba(0, 0, 0, 0.3)'
                 }}
             >
-                Submit Tech Task
+                Submit Corporate Task
             </button>
 
             {/* Mario-themed Modal */}
@@ -57,19 +48,19 @@ function TechForm({ participantData = {}, tasks = [] }) {
                     className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4"
                     style={{
                         backgroundImage: `
-                            radial-gradient(circle at 20% 20%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
-                            radial-gradient(circle at 80% 20%, rgba(255, 20, 147, 0.3) 0%, transparent 50%),
-                            radial-gradient(circle at 40% 40%, rgba(30, 144, 255, 0.2) 0%, transparent 50%)
+                            radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+                            radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.3) 0%, transparent 50%),
+                            radial-gradient(circle at 40% 40%, rgba(99, 102, 241, 0.2) 0%, transparent 50%)
                         `
                     }}
                 >
                     <form
                         onSubmit={handleSubmit}
-                        className="bg-gradient-to-br from-blue-100 via-white to-blue-50 mx-3 md:mx-10 my-3 p-6 md:p-10 rounded-2xl space-y-4 flex flex-col w-full max-w-xs sm:max-w-sm md:max-w-2xl relative border-4 border-black shadow-[12px_12px_0px_0px_#000]"
+                        className="bg-gradient-to-br from-blue-100 via-white to-green-50 mx-3 md:mx-10 my-3 p-6 md:p-10 rounded-2xl space-y-4 flex flex-col w-full max-w-xs sm:max-w-sm md:max-w-2xl relative border-4 border-black shadow-[12px_12px_0px_0px_#000]"
                         style={{
                             backgroundImage: `
                                 repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0,0,0,0.05) 20px, rgba(0,0,0,0.05) 40px),
-                                linear-gradient(135deg, #f0f8ff 0%, #ffffff 50%, #e6f3ff 100%)
+                                linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #ecfdf5 100%)
                             `
                         }}
                     >
@@ -85,18 +76,18 @@ function TechForm({ participantData = {}, tasks = [] }) {
                         {/* Mario-themed Header */}
                         <div className="text-center mb-6">
                             <h2
-                                className="font-extrabold text-2xl sm:text-3xl md:text-4xl text-green-600 mb-2"
+                                className="font-extrabold text-2xl sm:text-3xl md:text-4xl text-blue-600 mb-2"
                                 style={{
                                     fontFamily: 'Arial Black, sans-serif',
                                     textShadow: '3px 3px 0 #fff, 4px 4px 0 #ccc'
                                 }}
                             >
-                                TECH TASK SUBMISSION
+                                CORPORATE TASK SUBMISSION
                             </h2>
                         </div>
 
                         {/* Participant Information - Prefilled and Uneditable */}
-                        <div className="bg-gradient-to-r from-green-100 to-blue-100 p-4 rounded-xl border-3 border-black shadow-[6px_6px_0px_0px_#000] mb-6">
+                        <div className="bg-gradient-to-r from-blue-100 to-green-100 p-4 rounded-xl border-3 border-black shadow-[6px_6px_0px_0px_#000] mb-6">
                             <h3 className="font-bold text-lg text-gray-800 mb-3 text-center">
                                 Participant Information
                             </h3>
@@ -153,11 +144,11 @@ function TechForm({ participantData = {}, tasks = [] }) {
                         <div className="bg-white p-4 rounded-xl border-3 border-black shadow-[6px_6px_0px_0px_#000] mb-4">
                             <div className="flex flex-col space-y-2 w-full">
                                 <label className="text-sm sm:text-base md:text-lg font-bold text-gray-800 flex items-center">
-                                    🎯 Select Task:
+                                    Select Corporate Task:
                                 </label>
                                 <select
                                     name="selectedTask"
-                                    className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black border-2 border-black focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                                    className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black border-2 border-black focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     required
                                 >
                                     <option value="">-- Select Task --</option>
@@ -173,38 +164,8 @@ function TechForm({ participantData = {}, tasks = [] }) {
                         {/* Task Submission Form */}
                         <div className="bg-white p-4 rounded-xl border-3 border-black shadow-[6px_6px_0px_0px_#000] space-y-4">
                             <h3 className="font-bold text-lg text-gray-800 mb-3 text-center flex items-center justify-center">
-                                Task Details
+                                Submission Details
                             </h3>
-
-                            <div className="flex flex-col space-y-2 w-full">
-                                <label className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 flex items-center">
-                                    Github Link:
-                                </label>
-                                <input
-                                    name="githubLink"
-                                    className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black placeholder:text-gray-400 border-2 border-black focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
-                                    placeholder="Repository Link"
-                                    required
-                                />
-                            </div>
-
-                            <div className="flex flex-col space-y-2 w-full">
-                                <label className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 flex items-center">
-                                    Deployed Link:
-                                    {participantData.year === '2' && (
-                                        <span className="ml-2 text-red-500 text-sm">*Required for 2nd years</span>
-                                    )}
-                                    {participantData.year === '1' && (
-                                        <span className="ml-2 text-gray-500 text-sm">(Optional for 1st years)</span>
-                                    )}
-                                </label>
-                                <input
-                                    name="deployedLink"
-                                    className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black placeholder:text-gray-400 border-2 border-black focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
-                                    placeholder={participantData.year === '2' ? "Required for 2nd year students" : "(optional)"}
-                                    required={participantData.year === '2'}
-                                />
-                            </div>
 
                             <div className="flex flex-col space-y-2 w-full">
                                 <label className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 flex items-center">
@@ -213,8 +174,21 @@ function TechForm({ participantData = {}, tasks = [] }) {
                                 </label>
                                 <input
                                     name="demoVideo"
-                                    className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black placeholder:text-gray-400 border-2 border-black focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                                    className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black placeholder:text-gray-400 border-2 border-black focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="Drive link (required)"
+                                    required
+                                />
+                            </div>
+
+                            <div className="flex flex-col space-y-2 w-full">
+                                <label className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 flex items-center">
+                                    � Document for Answers:
+                                    <span className="ml-2 text-red-500 text-sm">*Required</span>
+                                </label>
+                                <input
+                                    name="documentLink"
+                                    className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black placeholder:text-gray-400 border-2 border-black focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                                    placeholder="Google Drive, PowerPoint, or PDF link"
                                     required
                                 />
                             </div>
@@ -224,7 +198,7 @@ function TechForm({ participantData = {}, tasks = [] }) {
                         <div className="mt-8 flex justify-center">
                             <button
                                 type="submit"
-                                className="w-full max-w-sm font-bold text-white py-3 px-6 text-base sm:text-lg md:text-xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 rounded-full border-4 border-black transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-[8px_8px_0px_0px_#000]"
+                                className="w-full max-w-sm font-bold text-white py-3 px-6 text-base sm:text-lg md:text-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-full border-4 border-black transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-[8px_8px_0px_0px_#000]"
                                 style={{
                                     fontFamily: 'Arial Black, sans-serif',
                                     textShadow: '2px 2px 0 rgba(0,0,0,0.3)'
@@ -240,4 +214,4 @@ function TechForm({ participantData = {}, tasks = [] }) {
     );
 }
 
-export default TechForm;
+export default CorpForm;

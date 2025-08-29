@@ -7,6 +7,9 @@ import ProfileCard from "@/components/Submission/ProfileCard";
 import TimeLine from "@/components/Submission/TimeLine";
 import EmailLogin from "@/components/Submission/EmailLogin";
 import TaskCard from "@/components/Submission/TaskCard";
+import TechForm from "@/components/Submission/TechForm";
+import CreativesForm from "@/components/Submission/creativesForm";
+import CorpForm from "@/components/Submission/corpForm";
 
 const taskTypeInstructions = {
     Technical:
@@ -478,9 +481,8 @@ const Dashboard = () => {
                         </div>
 
                         {/* Mario-styled Submit Button */}
-{/*                         
                         <div className="relative mb-8 z-50">
-                            {/* Power-up decorations around the button 
+                            {/* Power-up decorations around the button */}
                             <div className="absolute -top-8 -left-8 w-12 h-12 animate-bounce">
                                 <Image src="/item_star.png" alt="Star" fill className="object-contain" />
                             </div>
@@ -488,21 +490,26 @@ const Dashboard = () => {
                                 <Image src="/item_mushroom.png" alt="Mushroom" fill className="object-contain" />
                             </div>
 
-                            <a
-                                href={taskForm(participantData.domain)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-block font-bold text-black text-xl bg-gradient-to-b from-yellow-300 to-yellow-500 hover:from-yellow-400 hover:to-yellow-600 rounded-full py-4 px-8 border-4 border-black transition-all duration-200 transform hover:scale-110 active:scale-95"
-                                style={{
-                                    fontFamily: 'Arial Black, sans-serif',
-                                    textShadow: '2px 2px 0 #fff, 3px 3px 0 #ccc',
-                                    boxShadow: '0 0 25px rgba(255, 230, 0, 0.8), 0 8px 16px rgba(0, 0, 0, 0.3)'
-                                }}
-                            >
-                                🎯 {getSubmitButtonText(participantData.domain)} 🎯
-                            </a>
-                        </div> 
-        */}
+                            {/* Conditional Form Rendering Based on Domain */}
+                            {participantData.domain === "Technical" && (
+                                <TechForm
+                                    participantData={participantData}
+                                    tasks={participantData.tasks.filter(task => task.taskType === selectedTaskType)}
+                                />
+                            )}
+                            {(participantData.domain === "Creative" || participantData.domain === "Creatives") && (
+                                <CreativesForm
+                                    participantData={participantData}
+                                    tasks={participantData.tasks.filter(task => task.taskType === selectedTaskType)}
+                                />
+                            )}
+                            {participantData.domain === "Corporate" && (
+                                <CorpForm
+                                    participantData={participantData}
+                                    tasks={participantData.tasks.filter(task => task.taskType === selectedTaskType)}
+                                />
+                            )}
+                        </div>
 
                         {/* Decorative pipes at bottom */}
                         <div className="absolute bottom-24 left-4 w-16 h-24 hidden lg:block">

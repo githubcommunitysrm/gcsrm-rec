@@ -32,7 +32,7 @@ export async function GET(request) {
             );
         }
 
-        const { name, registrationNumber: regNo, email: participantEmail, phone: phoneNo, year, degreeWithBranch: dept, domain, status } = participant;
+        const { name, registrationNumber: regNo, email: participantEmail, phone, year, degreeWithBranch: dept, domain, status } = participant;
         let taskQueries = [];
 
         // Extract year number from participant year (e.g., "2nd Year" -> "2nd")
@@ -82,7 +82,7 @@ export async function GET(request) {
                 email: participantEmail,
                 year,
                 dept,
-                phoneNo,
+                phone,
                 domain: domain,
                 status,
                 tasks: []
@@ -108,7 +108,7 @@ export async function GET(request) {
             email: participantEmail,
             year,
             dept,
-            phoneNo,
+            phone,
             domain: domain,
             status,
             tasks // This will include the reference link along with other task details
