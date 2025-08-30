@@ -15,6 +15,7 @@ const taskSchema = new mongoose.Schema({
     },
     link: {
         type: String,
+        default: null
     },
     domain: {
         type: String,
@@ -24,27 +25,101 @@ const taskSchema = new mongoose.Schema({
     subdomain: {
         type: String,
         enum: [
-            "AIML", "Web-Dev", "CP", "App-dev", "Frontend", "Backend", "Full-stack",
-            "GD", "VFX", " "
+            "AIML",
+            "Web-Dev",
+            "App-Dev",
+            "Cybersecurity",
+            "Data-Science",
+            "GFX",
+            "VFX",
+            "UI-UX",
+            "Video-Editing",
+            "Content-Writing",
+            "Event-Management",
+            "Marketing",
+            "Business-Development",
+            "Public-Relations"
         ],
-        required: true
+        required: false
     },
     taskType: {
         type: String,
-        enum: ["Frontend", "Backend", "Full-stack", "AIML", "CP", "App-dev", "GD", "VFX"],
         required: true
     },
     year: {
         type: String,
-        enum: ["1st", "2nd"],
+        enum: ["1st", "2nd", "both"],
         required: true
     },
     deadline: {
         type: Date,
         required: false
     },
+
+    // Enhanced fields for complex tasks (especially AI/ML)
+    steps: {
+        type: [String],
+        required: false,
+        default: []
+    },
+    requirements: {
+        type: [String],
+        required: false,
+        default: []
+    },
+    datasets: {
+        type: [String],
+        required: false,
+        default: []
+    },
+    evaluation: {
+        type: String,
+        required: false
+    },
+    outputs: {
+        type: [String],
+        required: false,
+        default: []
+    },
+    techStack: {
+        type: [String],
+        required: false,
+        default: []
+    },
+
+    // Additional metadata
+    difficulty: {
+        type: String,
+        enum: ["Beginner", "Intermediate", "Advanced"],
+        required: false
+    },
+    estimatedTime: {
+        type: String,
+        required: false
+    },
+    tags: {
+        type: [String],
+        required: false,
+        default: []
+    },
+
+    submissionForm: {
+        type: String,
+        required: false
+    },
+    submissionInstructions: {
+        type: String,
+        required: false
+    }
+}, {
+    timestamps: true  // Adds createdAt and updatedAt automatically
 });
 
-const Task = mongoose.models.tasks || mongoose.model("tasks", taskSchema);
+// Index for better query performance
+taskSchema.index({ domain: 1, year: 1 });
+taskSchema.index({ subdomain: 1 });
+taskSchema.index({ deadline: 1 });
+
+const Task = mongoose.models.tasks25 || mongoose.model("tasks25", taskSchema);
 
 module.exports = Task;

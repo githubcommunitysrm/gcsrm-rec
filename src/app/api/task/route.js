@@ -32,47 +32,72 @@ export async function GET(request) {
             );
         }
 
-        const { name, regNo, email: participantEmail, phoneNo, year, dept, domain, status } = participant;
+        const { name, registrationNumber: regNo, email: participantEmail, phone, year, degreeWithBranch: dept, domain, status } = participant;
         let taskQueries = [];
-        let subdomainsList = [];
 
-        const domainKeys = Array.from(domain.keys())[0];
+        // Extract year number from participant year (e.g., "2nd Year" -> "2nd")
+        const yearNumber = year.includes("1st") ? "1st" :
+            year.includes("2nd") ? "2nd" :
+                year.includes("3rd") ? "3rd" :
+                    year.includes("4th") ? "4th" : year;
 
-        // Handle different domains (Technical, Creatives, Corporate, etc.)
-        for (let [domainKey, subdomains] of domain.entries()) {
-            if (domainKey === "Corporate") {
-                taskQueries.push({ domain: domainKey, year: year });
-            } else {
-                if (subdomains && subdomains.length > 0) {
-                    taskQueries.push({
-                        domain: domainKey,
-                        subdomain: { $in: subdomains },
-                        year: year
-                    });
-                    subdomainsList = subdomainsList.concat(subdomains);
-                }
-            }
+        // Handle the domain as a string (from your MongoDB structure)
+        console.log("Participant domain:", domain);
+        console.log("Participant year:", year, "extracted year:", yearNumber);
+
+        // First, let's check what tasks exist in the database
+        const allTasks = await Task.find({});
+        console.log("All tasks in database:", allTasks.map(t => ({
+            title: t.title,
+            domain: t.domain,
+            year: t.year,
+            taskType: t.taskType
+        })));
+
+        // Build flexible queries to handle domain variations
+        const domainVariations = [];
+        if (domain === "Corporate") {
+            domainVariations.push("Corporate");
+        } else if (domain === "Creative" || domain === "Creatives") {
+            domainVariations.push("Creative", "Creatives");
+        } else if (domain === "Technical") {
+            domainVariations.push("Technical");
+        } else {
+            domainVariations.push(domain);
         }
 
-        if (taskQueries.length === 0) {
+        console.log("Domain variations to search:", domainVariations);
+
+        taskQueries.push({
+            domain: { $in: domainVariations },
+            $or: [
+                { year: year },         // Exact year match (e.g., "2nd Year")
+                { year: yearNumber },   // Year number match (e.g., "2nd")
+                { year: "both" }        // Tasks for all years
+            ]
+        }); if (taskQueries.length === 0) {
             return NextResponse.json({
                 name,
                 regNo,
                 email: participantEmail,
                 year,
                 dept,
-                phoneNo,
-                domain: domainKeys, // Return only the domain keys
-                // subdomains: subdomainsList,
+                phone,
+                domain: domain,
                 status,
                 tasks: []
             });
         }
 
         // Fetch tasks based on the query
+        console.log("Task queries:", JSON.stringify(taskQueries, null, 2));
+
         let tasks = await Task.find({
             $or: taskQueries
         });
+
+        console.log("Found tasks count:", tasks.length);
+        console.log("Tasks found:", tasks.map(t => ({ title: t.title, domain: t.domain, year: t.year })));
 
         // Clean each task before sending it to the client
         tasks = tasks.map(cleanTaskData);
@@ -83,9 +108,8 @@ export async function GET(request) {
             email: participantEmail,
             year,
             dept,
-            phoneNo,
-            domain: domainKeys, // Return only the domain keys
-            // subdomains: subdomainsList,
+            phone,
+            domain: domain,
             status,
             tasks // This will include the reference link along with other task details
         });
