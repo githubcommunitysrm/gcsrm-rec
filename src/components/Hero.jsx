@@ -6,8 +6,10 @@ import Image from 'next/image';
 const HeroSection = () => {
   const [showFallingBoss, setShowFallingBoss] = useState(false);
   const [now, setNow] = useState(() => new Date());
-  const [isWindowOpen, setIsWindowOpen] = useState(false);
-  const [isWindowClosed, setIsWindowClosed] = useState(false);
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [isRegistrationClosed, setIsRegistrationClosed] = useState(false);
+  const [isTaskSubmissionOpen, setIsTaskSubmissionOpen] = useState(false);
+  const [isTaskSubmissionClosed, setIsTaskSubmissionClosed] = useState(false);
   const [showPalmTree, setShowPalmTree] = useState(true);
   const [leftCoins, setLeftCoins] = useState([]); // coins spawned from left question block
   const [leftBump, setLeftBump] = useState(false); // bump animation for block
@@ -18,16 +20,18 @@ const HeroSection = () => {
   const [rightBump, setRightBump] = useState(false);
   const rightTimers = useRef({ returnTimer: null, cleanupTimer: null });
 
-  const startDate = new Date(2025, 7, 25, 0, 0, 0); // August 25, 2025 at 00:00:00
-  const endDate = new Date(2025, 7, 30, 23, 59, 59); // August 30, 2025 at 23:59:59
+  const registrationStartDate = new Date(2025, 7, 25, 0, 0, 0); // August 25, 2025 at 00:00:00
+  const registrationEndDate = new Date(2025, 7, 30, 23, 59, 59); // August 30, 2025 at 23:59:59
+  const taskStartDate = new Date(2025, 7, 31, 3, 0, 0); // August 31, 2025 at 03:00:00
+  const taskEndDate = new Date(2025, 8, 5, 23, 59, 59); // September 6, 2025 at 23:59:59
 
   const totalSecondsWindow = Math.max(
     1,
-    Math.floor((endDate.getTime() - startDate.getTime()) / 1000)
+    Math.floor((registrationEndDate.getTime() - registrationStartDate.getTime()) / 1000)
   );
   const elapsedSeconds = Math.max(
     0,
-    Math.floor((now.getTime() - startDate.getTime()) / 1000)
+    Math.floor((now.getTime() - registrationStartDate.getTime()) / 1000)
   );
   const progress = Math.min(
     100,
@@ -70,11 +74,16 @@ const HeroSection = () => {
   }, []);
 
   useEffect(() => {
-    setIsWindowOpen(
-      now.getTime() >= startDate.getTime() &&
-      now.getTime() <= endDate.getTime()
+    setIsRegistrationOpen(
+      now.getTime() >= registrationStartDate.getTime() &&
+      now.getTime() <= registrationEndDate.getTime()
     );
-    setIsWindowClosed(now.getTime() > endDate.getTime());
+    setIsRegistrationClosed(now.getTime() > registrationEndDate.getTime());
+    setIsTaskSubmissionOpen(
+      now.getTime() >= taskStartDate.getTime() &&
+      now.getTime() <= taskEndDate.getTime()
+    );
+    setIsTaskSubmissionClosed(now.getTime() > taskEndDate.getTime());
   }, [now]);
 
   // Cleanup any pending right-block timers on unmount
@@ -100,13 +109,27 @@ const HeroSection = () => {
   const secondsUntil = (target) =>
     Math.max(0, Math.floor((target.getTime() - now.getTime()) / 1000));
 
-  const isTimerExpired = now.getTime() > endDate.getTime();
-  const isTimerActive =
-    now.getTime() >= startDate.getTime() &&
-    now.getTime() <= endDate.getTime();
-  const timeLeft = isTimerActive
-    ? secondsUntil(endDate)
-    : Math.max(0, secondsUntil(startDate));
+  const isRegistrationExpired = now.getTime() > registrationEndDate.getTime();
+  const isRegistrationActive =
+    now.getTime() >= registrationStartDate.getTime() &&
+    now.getTime() <= registrationEndDate.getTime();
+  const isTaskSubmissionActive =
+    now.getTime() >= taskStartDate.getTime() &&
+    now.getTime() <= taskEndDate.getTime();
+
+  // Calculate time left based on current state
+  let timeLeft;
+  if (isRegistrationActive) {
+    timeLeft = secondsUntil(registrationEndDate);
+  } else if (isTaskSubmissionActive) {
+    timeLeft = secondsUntil(taskEndDate);
+  } else if (!isRegistrationExpired) {
+    timeLeft = secondsUntil(registrationStartDate);
+  } else if (!isTaskSubmissionOpen) {
+    timeLeft = secondsUntil(taskStartDate);
+  } else {
+    timeLeft = 0;
+  }
   const formatTime = formatHourMinSec;
 
   return (
@@ -459,7 +482,8 @@ const HeroSection = () => {
         <div className="relative mb-12 mt-8">
           <button
             onClick={() => {
-              if (!isTimerExpired) {
+              if (isRegistrationActive || (!isRegistrationExpired && !isTaskSubmissionOpen)) {
+                // During registration or before registration opens: scroll to registration
                 const registrationSection =
                   document.getElementById(
                     'registration-section'
@@ -467,40 +491,55 @@ const HeroSection = () => {
                 registrationSection?.scrollIntoView({
                   behavior: 'smooth',
                 });
+              } else if (isTaskSubmissionActive) {
+                // During task submission: redirect to dashboard
+                window.location.href = '/dashboard';
               }
             }}
-            disabled={hydrated ? isTimerExpired : true}
-            className={`relative overflow-hidden font-bold py-4 px-8 text-xl rounded border-4 border-black shadow-2xl transform transition-all duration-300 ${hydrated && isTimerExpired
+            disabled={hydrated ? (isRegistrationClosed && !isTaskSubmissionActive) : true}
+            className={`relative overflow-hidden font-bold py-4 px-8 text-xl rounded border-4 border-black shadow-2xl transform transition-all duration-300 ${hydrated && (isRegistrationClosed && !isTaskSubmissionActive)
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 hover:scale-105'
               }`}
             style={{ fontFamily: 'Arial Black, sans-serif' }}>
             <span
-              className={`flex items-center space-x-2 ${hydrated && isTimerExpired
+              className={`flex items-center space-x-2 ${hydrated && (isRegistrationClosed && !isTaskSubmissionActive)
                 ? 'text-gray-600'
                 : 'text-black'
                 }`}>
               <span className="text-2xl">
-                {hydrated && isTimerExpired ? '⏰' : ''}
+                {hydrated && (isRegistrationClosed && !isTaskSubmissionActive) ? '⏰' : ''}
               </span>
               <span className="flex flex-col items-center">
                 <span>
                   {hydrated
-                    ? isTimerExpired
-                      ? 'REGISTRATION CLOSED!'
-                      : 'REGISTER NOW!'
+                    ? isTaskSubmissionActive
+                      ? 'SUBMIT TASKS NOW!'
+                      : isRegistrationActive
+                        ? 'REGISTER NOW!'
+                        : isRegistrationExpired && !isTaskSubmissionOpen
+                          ? 'REGISTRATION CLOSED!'
+                          : !isRegistrationExpired
+                            ? 'REGISTER NOW!'
+                            : 'REGISTRATION CLOSED!'
                     : 'REGISTER'}
                 </span>
                 <span className="text-xl font-normal text-yellow-300">
                   {hydrated
-                    ? isTimerExpired
-                      ? 'Time Up!'
-                      : `${formatTime(timeLeft)}`
+                    ? isTaskSubmissionActive
+                      ? 'Dashboard Open!'
+                      : isRegistrationActive
+                        ? `${formatTime(timeLeft)}`
+                        : isRegistrationExpired && !isTaskSubmissionOpen
+                          ? 'Tasks Open Soon!'
+                          : !isRegistrationExpired
+                            ? `${formatTime(timeLeft)}`
+                            : 'Time Up!'
                     : '...'}
                 </span>
               </span>
               <span className="text-2xl">
-                {hydrated && isTimerExpired ? '⏰' : ''}
+                {hydrated && (isRegistrationClosed && !isTaskSubmissionActive) ? '⏰' : ''}
               </span>
             </span>
           </button>
