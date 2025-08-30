@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 const geistSans = Geist({
@@ -300,6 +301,7 @@ export default function RootLayout({ children }) {
 				</noscript>
 				{/* End Google Tag Manager (noscript) */}
 				{children}
+				<Analytics />
 			</body>
 		</html>
 	);

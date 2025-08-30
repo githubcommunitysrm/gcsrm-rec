@@ -47,12 +47,12 @@ export async function GET(request) {
 
         // First, let's check what tasks exist in the database
         const allTasks = await Task.find({});
-        console.log("All tasks in database:", allTasks.map(t => ({
-            title: t.title,
-            domain: t.domain,
-            year: t.year,
-            taskType: t.taskType
-        })));
+        // console.log("All tasks in database:", allTasks.map(t => ({
+        //     title: t.title,
+        //     domain: t.domain,
+        //     year: t.year,
+        //     taskType: t.taskType
+        // })));
 
         // Build flexible queries to handle domain variations
         const domainVariations = [];
@@ -90,14 +90,14 @@ export async function GET(request) {
         }
 
         // Fetch tasks based on the query
-        console.log("Task queries:", JSON.stringify(taskQueries, null, 2));
+        // console.log("Task queries:", JSON.stringify(taskQueries, null, 2));
 
         let tasks = await Task.find({
             $or: taskQueries
         });
 
         console.log("Found tasks count:", tasks.length);
-        console.log("Tasks found:", tasks.map(t => ({ title: t.title, domain: t.domain, year: t.year })));
+        // console.log("Tasks found:", tasks.map(t => ({ title: t.title, domain: t.domain, year: t.year })));
 
         // Clean each task before sending it to the client
         tasks = tasks.map(cleanTaskData);
