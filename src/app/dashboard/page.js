@@ -497,7 +497,7 @@ const Dashboard = () => {
 						className="absolute top-32 left-1/4 w-20 h-14 opacity-50 animate-pulse"
 						style={{ animationDelay: '2s' }}>
 						<Image
-							src="/cloud-3.png"
+							src="/cloud-2.png"
 							alt="Cloud"
 							fill
 							className="object-contain"
@@ -510,8 +510,7 @@ const Dashboard = () => {
 						style={{
 							backgroundImage: 'url(/block_textured.png)',
 							backgroundRepeat: 'repeat',
-							backgroundSize: '64px 64px',
-							backgroundPosition: 'bottom',
+							backgroundSize: '34px 34px',
 						}}
 					/>
 
@@ -653,7 +652,7 @@ const Dashboard = () => {
 						</div>
 
 						{/* Mario-styled Submit Button */}
-						<div className="relative mb-8 z-50">
+						<div className="relative mb-8 z-50 pb-12">
 							{/* Power-up decorations around the button */}
 							<div className="absolute -top-8 -left-8 w-12 h-12 animate-bounce">
 								<Image
