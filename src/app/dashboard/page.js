@@ -20,6 +20,19 @@ const taskTypeInstructions = {
 		"Complete all sections thoughtfully and submit your responses by the deadline using your SRM email ID click the 'View Task' Button to Open submission form. Keep your answers original and true to yourself. (No AI/ChatGPT assistance allowed!)",
 };
 
+// Submission window (India Standard Time)
+// Start: 31st Aug 2025 03:00:00 IST
+// End:   6th Sep 2025 23:59:59 IST
+const SUBMISSION_START = new Date('2025-08-31T03:00:00+05:30');
+const SUBMISSION_END = new Date('2025-09-06T23:59:59+05:30');
+
+const formatForDisplay = (d) =>
+	d.toLocaleString(undefined, {
+		timeZone: 'Asia/Kolkata',
+		dateStyle: 'medium',
+		timeStyle: 'short',
+	});
+
 const getSubmitButtonText = (domain) => {
 	return domain === 'Corporate' ? 'View Task' : 'Submit Task';
 };
@@ -31,6 +44,10 @@ const Dashboard = () => {
 	const [error, setError] = useState('');
 	const [emailError, setEmailError] = useState('');
 	const [selectedTaskType, setSelectedTaskType] = useState('');
+
+	// Client-side submission open flag (evaluated on render)
+	const now = new Date();
+	const submissionOpen = now >= SUBMISSION_START && now <= SUBMISSION_END;
 
 	const validateEmail = (email) => {
 		const emailPattern = /^[a-zA-Z0-9._%+-]+@srmist\.edu\.in$/;
@@ -81,7 +98,7 @@ const Dashboard = () => {
 				} else {
 					setError(
 						error.response?.data?.message ||
-							'Failed to fetch data. Please try again.'
+						'Failed to fetch data. Please try again.'
 					);
 				}
 				setLoading(false);
@@ -141,11 +158,10 @@ const Dashboard = () => {
 					{taskTypes.map((type) => (
 						<button
 							key={type}
-							className={`px-4 py-2 rounded-md text-white font-poppins ${
-								selectedTaskType === type
+							className={`px-4 py-2 rounded-md text-white font-poppins ${selectedTaskType === type
 									? 'bg-green-500'
 									: 'bg-gray-700'
-							} hover:bg-green-600`}
+								} hover:bg-green-600`}
 							onClick={() => setSelectedTaskType(type)}>
 							{type} Tasks
 						</button>
@@ -158,11 +174,10 @@ const Dashboard = () => {
 					{taskTypes.map((type) => (
 						<button
 							key={type}
-							className={`px-4 py-2 rounded-md text-white font-poppins ${
-								selectedTaskType === type
+							className={`px-4 py-2 rounded-md text-white font-poppins ${selectedTaskType === type
 									? 'bg-green-500'
 									: 'bg-gray-700'
-							} hover:bg-green-600`}
+								} hover:bg-green-600`}
 							onClick={() => setSelectedTaskType(type)}>
 							{type} Tasks
 						</button>
@@ -201,9 +216,8 @@ const Dashboard = () => {
 
 	return (
 		<section
-			className={`relative w-full ${
-				participantData ? '' : 'h-[80vh]'
-			} overflow-hidden`}>
+			className={`relative w-full ${participantData ? '' : 'h-[80vh]'
+				} overflow-hidden`}>
 			<video
 				autoPlay
 				muted
@@ -319,11 +333,10 @@ const Dashboard = () => {
 
 							{/* Status Message */}
 							<div
-								className={`text-center p-4 rounded-lg border-2 ${
-									error
+								className={`text-center p-4 rounded-lg border-2 ${error
 										? 'bg-red-100 border-red-500'
 										: 'bg-green-100 border-green-500'
-								}`}>
+									}`}>
 								<div className="flex items-center justify-center mb-2">
 									{error ? (
 										<span className="text-2xl mr-2">
@@ -340,11 +353,10 @@ const Dashboard = () => {
 										</div>
 									)}
 									<span
-										className={`font-bold text-lg ${
-											error
+										className={`font-bold text-lg ${error
 												? 'text-red-700'
 												: 'text-green-700'
-										}`}>
+											}`}>
 										{error
 											? error
 											: 'Searching for participant'}
@@ -537,6 +549,17 @@ const Dashboard = () => {
 
 					{/* Main content container */}
 					<div className="relative z-20 flex flex-col items-center justify-center text-white p-4 sm:p-6 pt-8">
+						{/* Submission window banner */}
+						{!submissionOpen && (
+							<div className="w-full max-w-3xl mb-6 p-4 rounded-lg border-4 border-black bg-red-600 text-white text-center shadow-lg">
+								<h4 className="font-bold text-lg">Submissions are currently closed</h4>
+								<p className="mt-2 text-sm">
+									{now < SUBMISSION_START
+										? `Submissions open at ${formatForDisplay(SUBMISSION_START)} (IST)`
+										: `Submission window closed at ${formatForDisplay(SUBMISSION_END)} (IST)`}
+								</p>
+							</div>
+						)}
 						{/* Profile Card Section */}
 						<div className="relative w-full sm:w-auto mx-4 my-2 sm:mx-10">
 							<ProfileCard
@@ -617,11 +640,10 @@ const Dashboard = () => {
 										(type) => (
 											<button
 												key={type}
-												className={`px-6 py-3 rounded-lg border-4 border-black font-bold text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 ${
-													selectedTaskType === type
+												className={`px-6 py-3 rounded-lg border-4 border-black font-bold text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 ${selectedTaskType === type
 														? 'bg-gradient-to-b from-green-400 to-green-600 text-black shadow-lg'
 														: 'bg-gradient-to-b from-red-400 to-red-600 text-black hover:from-red-500 hover:to-red-700'
-												}`}
+													}`}
 												onClick={() =>
 													setSelectedTaskType(type)
 												}
@@ -632,7 +654,7 @@ const Dashboard = () => {
 														'1px 1px 0 #fff',
 													boxShadow:
 														selectedTaskType ===
-														type
+															type
 															? '0 0 15px rgba(0, 255, 0, 0.5)'
 															: '0 0 10px rgba(255, 0, 0, 0.3)',
 												}}>
@@ -695,20 +717,22 @@ const Dashboard = () => {
 													task.taskType ===
 													selectedTaskType
 											)}
+											submissionOpen={submissionOpen}
 										/>
 									)}
 									{(participantData.domain === 'Creative' ||
 										participantData.domain ===
-											'Creatives') && (
-										<CreativesForm
-											participantData={participantData}
-											tasks={participantData.tasks.filter(
-												(task) =>
-													task.taskType ===
-													selectedTaskType
-											)}
-										/>
-									)}
+										'Creatives') && (
+											<CreativesForm
+												participantData={participantData}
+												tasks={participantData.tasks.filter(
+													(task) =>
+														task.taskType ===
+														selectedTaskType
+												)}
+												submissionOpen={submissionOpen}
+											/>
+										)}
 									{participantData.domain === 'Corporate' && (
 										<CorpForm
 											participantData={participantData}
@@ -717,6 +741,7 @@ const Dashboard = () => {
 													task.taskType ===
 													selectedTaskType
 											)}
+											submissionOpen={submissionOpen}
 										/>
 									)}
 								</>

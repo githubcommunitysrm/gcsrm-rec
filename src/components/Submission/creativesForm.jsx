@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
+import toast, { Toaster } from 'react-hot-toast';
+import confetti from 'canvas-confetti';
 
-function CreativesForm({ participantData = {}, tasks = [] }) {
+function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true }) {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleOpen = () => {
 		setIsOpen(true);
@@ -14,6 +17,32 @@ function CreativesForm({ participantData = {}, tasks = [] }) {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+
+		if (!submissionOpen) {
+			toast.error('Submission window is closed', {
+				duration: 5000,
+				style: { background: '#ef4444', color: '#fff', fontSize: '16px' },
+			});
+			return;
+		}
+
+		setIsSubmitting(true);
+
+		const loadingToastId = toast.loading('🎮 Processing your adventure request...', {
+			style: {
+				background: '#fc8e2d',
+				color: '#000',
+				fontSize: '14px',
+				fontWeight: '800',
+				fontFamily: 'ArcadeClassic',
+				border: '4px solid #000',
+				borderRadius: '0px',
+				padding: '16px 20px',
+				boxShadow: '8px 8px 0px #000',
+				textTransform: 'uppercase',
+				letterSpacing: '1px',
+			},
+		});
 		const formData = new FormData(event.target);
 
 		// Prepare data object
@@ -50,50 +79,110 @@ function CreativesForm({ participantData = {}, tasks = [] }) {
 				body: JSON.stringify(data),
 			});
 
+
 			const text = await response.text();
+
 			try {
 				const json = JSON.parse(text);
 				if (response.ok) {
-					alert(json.result || 'Form submitted successfully!');
+					// Mario confetti pattern
+					confetti({ particleCount: 50, spread: 60, origin: { y: 0.7, x: 0.3 }, colors: ['#ff4757', '#3742fa', '#ffa502', '#2ed573'], shapes: ['square', 'circle'], scalar: 1.2 });
+					setTimeout(() => confetti({ particleCount: 50, spread: 60, origin: { y: 0.7, x: 0.7 }, colors: ['#ff4757', '#3742fa', '#ffa502', '#2ed573'], shapes: ['square', 'circle'], scalar: 1.2 }), 200);
+					setTimeout(() => confetti({ particleCount: 30, spread: 80, origin: { y: 0.5, x: 0.5 }, colors: ['#ffdd59', '#ff6b6b', '#4ecdc4', '#45b7d1'], shapes: ['circle'], scalar: 0.8 }), 400);
+					toast.dismiss(loadingToastId);
+					toast.success(
+						`Wahoo! ${participantData.name || 'Hero'}, submission received!`,
+						{
+							duration: 7000,
+							style: {
+								background: '#fc8e2d',
+								color: '#000',
+								fontSize: '15px',
+								fontWeight: '800',
+								fontFamily: 'ArcadeClassic',
+								border: '4px solid #000',
+								borderRadius: '0px',
+								padding: '18px 22px',
+								boxShadow: '10px 10px 0px #000',
+								textAlign: 'center',
+								maxWidth: '450px',
+								textTransform: 'uppercase',
+								letterSpacing: '1px',
+							},
+							icon: '🎮',
+							iconTheme: { primary: '#000', secondary: '#fc8e2d' },
+						}
+					);
 					setIsOpen(false);
 				} else {
-					alert(
-						json.error ||
-							json.message ||
-							text ||
-							'Error submitting form.'
-					);
+					toast.dismiss(loadingToastId);
+					toast.error(json.error || json.message || text || 'Error submitting form.', { duration: 6000 });
 				}
 			} catch (e) {
 				if (response.ok) {
-					alert(text || 'Form submitted successfully!');
+					confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
+					toast.dismiss(loadingToastId);
+					toast.success(text || 'Form submitted successfully!', { duration: 5000 });
 					setIsOpen(false);
 				} else {
-					alert(text || 'Error submitting form.');
+					toast.dismiss(loadingToastId);
+					toast.error(text || 'Error submitting form.', { duration: 5000 });
 				}
 			}
 		} catch (error) {
-			console.error('Submission error:', error);
-			alert('Error submitting form. Please try again.');
+			toast.dismiss(loadingToastId);
+			toast.error(
+				'🛠️ Oops! The connection pipe seems blocked! Try again, brave adventurer!',
+				{
+					duration: 5000,
+					style: {
+						background: '#fc8e2d',
+						color: '#000',
+						fontSize: '14px',
+						fontWeight: '800',
+						fontFamily: 'ArcadeClassic',
+						border: '4px solid #000',
+						borderRadius: '0px',
+						padding: '16px 20px',
+						boxShadow: '8px 8px 0px #000',
+						textTransform: 'uppercase',
+						letterSpacing: '1px',
+					},
+					icon: '📡',
+				}
+			);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
 	return (
 		<>
+			<Toaster />
 			{/* Mario-styled Submit Button */}
 			<button
-				onClick={handleOpen}
-				className="inline-block font-bold text-black text-xl bg-gradient-to-b from-yellow-300 to-yellow-500 hover:from-yellow-400 hover:to-yellow-600 rounded-full py-4 px-8 border-4 border-black transition-all duration-200 transform hover:scale-110 active:scale-95 shadow-[8px_8px_0px_0px_#000]"
+				type="submit"
+				disabled={isSubmitting}
+				className={`w-full py-3 px-6 rounded-lg font-bold text-lg transition-all duration-300 ${isSubmitting
+						? 'bg-gray-500 cursor-not-allowed'
+						: 'bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+					} border-4 border-black`}
 				style={{
 					fontFamily: 'Arial Black, sans-serif',
-					textShadow: '2px 2px 0 #fff, 3px 3px 0 #ccc',
-					boxShadow:
-						'0 0 25px rgba(255, 230, 0, 0.8), 0 8px 16px rgba(0, 0, 0, 0.3)',
-				}}>
-				Submit Creative Task
-			</button>
-
-			{/* Mario-themed Modal */}
+					textTransform: 'uppercase',
+					letterSpacing: '1px',
+					boxShadow: isSubmitting ? 'none' : '8px 8px 0px #000',
+				}}
+			>
+				{isSubmitting ? (
+					<span className="flex items-center justify-center">
+						<span className="animate-spin mr-2">🍄</span>
+						Submitting...
+					</span>
+				) : (
+					'Submit Your Creative Adventure'
+				)}
+			</button>			{/* Mario-themed Modal */}
 			{isOpen && (
 				<div
 					className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4"

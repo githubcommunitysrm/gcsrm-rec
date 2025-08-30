@@ -6,6 +6,27 @@ export async function POST(request) {
   try {
     const body = await request.json();
 
+    // Submission window (India Standard Time)
+    // Start: 31st Aug 2025 03:00:00 IST
+    // End:   6th Sep 2025 23:59:59 IST
+    const SUBMISSION_START = new Date('2025-08-31T03:00:00+05:30');
+    const SUBMISSION_END = new Date('2025-09-06T23:59:59+05:30');
+    const now = new Date();
+
+    if (now < SUBMISSION_START) {
+      return NextResponse.json(
+        { error: 'Submission not open yet', opensAt: SUBMISSION_START.toISOString() },
+        { status: 403 }
+      );
+    }
+
+    if (now > SUBMISSION_END) {
+      return NextResponse.json(
+        { error: 'Submission window has closed', closedAt: SUBMISSION_END.toISOString() },
+        { status: 403 }
+      );
+    }
+
     await connectDB();
 
     const { registrationNumber, email } = body || {};

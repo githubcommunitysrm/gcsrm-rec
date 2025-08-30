@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
+import toast, { Toaster } from 'react-hot-toast';
+import confetti from 'canvas-confetti';
 
-function TechForm({ participantData = {}, tasks = [] }) {
+function TechForm({ participantData = {}, tasks = [], submissionOpen = true }) {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleOpen = () => {
 		setIsOpen(true);
@@ -22,6 +25,32 @@ function TechForm({ participantData = {}, tasks = [] }) {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+
+		if (!submissionOpen) {
+			toast.error('Submission window is closed', {
+				duration: 5000,
+				style: { background: '#ef4444', color: '#fff', fontSize: '16px' },
+			});
+			return;
+		}
+
+		setIsSubmitting(true);
+
+		const loadingToastId = toast.loading('🎮 Processing your adventure request...', {
+			style: {
+				background: '#fc8e2d',
+				color: '#000',
+				fontSize: '14px',
+				fontWeight: '800',
+				fontFamily: 'ArcadeClassic',
+				border: '4px solid #000',
+				borderRadius: '0px',
+				padding: '16px 20px',
+				boxShadow: '8px 8px 0px #000',
+				textTransform: 'uppercase',
+				letterSpacing: '1px',
+			},
+		});
 		const formData = new FormData(event.target);
 
 		// Prepare data object
@@ -58,27 +87,51 @@ function TechForm({ participantData = {}, tasks = [] }) {
 				body: JSON.stringify(data),
 			});
 
+
 			const text = await response.text();
+
 			try {
 				const json = JSON.parse(text);
 				if (response.ok) {
-					alert(json.result || 'Form submitted successfully!');
+					// Mario confetti pattern
+					confetti({ particleCount: 50, spread: 60, origin: { y: 0.7, x: 0.3 }, colors: ['#ff4757', '#3742fa', '#ffa502', '#2ed573'], shapes: ['square', 'circle'], scalar: 1.2 });
+					setTimeout(() => confetti({ particleCount: 50, spread: 60, origin: { y: 0.7, x: 0.7 }, colors: ['#ff4757', '#3742fa', '#ffa502', '#2ed573'], shapes: ['square', 'circle'], scalar: 1.2 }), 200);
+					setTimeout(() => confetti({ particleCount: 30, spread: 80, origin: { y: 0.5, x: 0.5 }, colors: ['#ffdd59', '#ff6b6b', '#4ecdc4', '#45b7d1'], shapes: ['circle'], scalar: 0.8 }), 400);
+					toast.dismiss(loadingToastId);
+					toast.success(
+						`Wahoo! ${participantData.name || 'Hero'}, submission received!`,
+						{
+							duration: 7000,
+							style: {
+								background: '#fc8e2d',
+								color: '#000',
+								fontSize: '15px',
+								fontWeight: '800',
+								fontFamily: 'ArcadeClassic',
+								border: '4px solid #000',
+								borderRadius: '0px',
+								padding: '18px 22px',
+								boxShadow: '10px 10px 0px #000',
+								textAlign: 'center',
+								maxWidth: '450px',
+								textTransform: 'uppercase',
+								letterSpacing: '1px',
+							},
+							icon: '🎮',
+							iconTheme: { primary: '#000', secondary: '#fc8e2d' },
+						}
+					);
 					setIsOpen(false);
 				} else {
-					alert(
-						json.error ||
-							json.message ||
-							text ||
-							'Error submitting form.'
-					);
+					toast.error(json.error || json.message || text || 'Error submitting form.', { duration: 6000 });
 				}
 			} catch (e) {
-				// Not JSON
 				if (response.ok) {
-					alert(text || 'Form submitted successfully!');
+					confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
+					toast.success(text || 'Form submitted successfully!', { duration: 5000 });
 					setIsOpen(false);
 				} else {
-					alert(text || 'Error submitting form.');
+					toast.error(text || 'Error submitting form.', { duration: 5000 });
 				}
 			}
 		} catch (error) {
@@ -89,9 +142,11 @@ function TechForm({ participantData = {}, tasks = [] }) {
 
 	return (
 		<>
+			<Toaster />
 			{/* Mario-styled Submit Button */}
 			<button
 				onClick={handleOpen}
+				disabled={!submissionOpen}
 				className="inline-block font-bold text-black text-xl bg-gradient-to-b from-yellow-300 to-yellow-500 hover:from-yellow-400 hover:to-yellow-600 rounded-full py-4 px-8 border-4 border-black transition-all duration-200 transform hover:scale-110 active:scale-95 shadow-[8px_8px_0px_0px_#000]"
 				style={{
 					fontFamily: 'Arial Black, sans-serif',
@@ -99,7 +154,7 @@ function TechForm({ participantData = {}, tasks = [] }) {
 					boxShadow:
 						'0 0 25px rgba(255, 230, 0, 0.8), 0 8px 16px rgba(0, 0, 0, 0.3)',
 				}}>
-				Submit Tech Task
+				{submissionOpen ? 'Submit Tech Task' : 'Submissions Closed'}
 			</button>
 
 			{/* Mario-themed Modal */}
@@ -262,12 +317,22 @@ function TechForm({ participantData = {}, tasks = [] }) {
 						<div className="mt-8 flex justify-center">
 							<button
 								type="submit"
-								className="w-full max-w-sm font-bold text-white py-3 px-6 text-base sm:text-lg md:text-xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 rounded-full border-4 border-black transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-[8px_8px_0px_0px_#000]"
+								disabled={isSubmitting}
+								className={`w-full max-w-sm font-bold text-white py-3 px-6 text-base sm:text-lg md:text-xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 rounded-full border-4 border-black transition-all duration-200 transform ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105 active:scale-95'} shadow-[8px_8px_0px_0px_#000]`}
 								style={{
 									fontFamily: 'Arial Black, sans-serif',
 									textShadow: '2px 2px 0 rgba(0,0,0,0.3)',
 								}}>
-								SUBMIT TASK
+								{isSubmitting ? (
+									<span className="flex items-center justify-center">
+										<span className="animate-spin mr-2 inline-block w-5 h-5 align-middle">
+											🍄
+										</span>
+										Submitting...
+									</span>
+								) : (
+									'SUBMIT TASK'
+								)}
 							</button>
 						</div>
 					</form>
