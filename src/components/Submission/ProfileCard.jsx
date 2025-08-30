@@ -99,12 +99,12 @@ const ProfileCard = ({ name, regNo, domain }) => {
             `}</style>
 
             {/* Floating Question Block */}
-            <div className="absolute -top-4 -right-4 w-12 h-12 z-20 block-bump">
+            <div className="absolute -top-4 -right-4 w-12 h-12 z-20 block-bump ">
                 <Image
                     src={marioAssets.block}
                     alt="Question Block"
                     fill
-                    className="object-contain hover:scale-110 transition-transform cursor-pointer"
+                    className="object-contain hover:scale-110 transition-transform cursor-pointer "
                 />
             </div>
 
@@ -119,7 +119,7 @@ const ProfileCard = ({ name, regNo, domain }) => {
             </div>
 
             {/* Main Card */}
-            <div className="mario-card flex items-center h-32 rounded-lg p-6 transition-all duration-300 relative overflow-hidden">
+            <div className="mario-card flex items-center h-36 rounded-lg p-6 transition-all duration-300 relative overflow-hidden">
 
                 {/* Background Pattern */}
                 <div
@@ -155,12 +155,7 @@ const ProfileCard = ({ name, regNo, domain }) => {
 
                 {/* Pipe separator */}
                 <div className="relative w-4 h-16 mx-4">
-                    <Image
-                        src="/pipe_basic.png"
-                        alt="Pipe"
-                        fill
-                        className="object-contain opacity-60"
-                    />
+                    
                 </div>
 
                 {/* Profile Information */}
@@ -183,7 +178,7 @@ const ProfileCard = ({ name, regNo, domain }) => {
 
                         <div className="flex items-center">
                             <h3
-                                className="font-bold text-md"
+                                className="font-bold text-md "
                                 style={{
                                     fontFamily: 'Arial Black, sans-serif',
                                     color: '#fff',
@@ -210,9 +205,9 @@ const ProfileCard = ({ name, regNo, domain }) => {
                 </div> */}
             </div>
 
-            <div className="flex justify-between items-center mt-2 px-2">
+            <div className="flex justify-between items-center mt-5 px-2">
                 {/* Ground blocks */}
-                <div className="flex space-x-1">
+                <div className="flex space-x-1 ">
                     {[1, 2, 3].map((i) => (
                         <div key={i} className="w-4 h-4 relative opacity-60">
                             <Image

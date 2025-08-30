@@ -259,7 +259,7 @@ const Dashboard = () => {
                     {/* Main loading container */}
                     <div className="relative w-full max-w-md">
                         {/* Mario Character bouncing */}
-                        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 w-16 h-20 mario-bounce">
+                        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 w-16 h-20 mario-bounce ">
                             <Image src="/char_mario_sm-idle.png" alt="Mario" fill className="object-contain" />
                         </div>
 
