@@ -491,23 +491,38 @@ const Dashboard = () => {
                             </div>
 
                             {/* Conditional Form Rendering Based on Domain */}
-                            {participantData.domain === "Technical" && (
-                                <TechForm
-                                    participantData={participantData}
-                                    tasks={participantData.tasks.filter(task => task.taskType === selectedTaskType)}
-                                />
-                            )}
-                            {(participantData.domain === "Creative" || participantData.domain === "Creatives") && (
-                                <CreativesForm
-                                    participantData={participantData}
-                                    tasks={participantData.tasks.filter(task => task.taskType === selectedTaskType)}
-                                />
-                            )}
-                            {participantData.domain === "Corporate" && (
-                                <CorpForm
-                                    participantData={participantData}
-                                    tasks={participantData.tasks.filter(task => task.taskType === selectedTaskType)}
-                                />
+                            {participantData.status === 'taskSubmitted' ? (
+                                <button
+                                    disabled
+                                    className="w-full max-w-sm font-bold text-white py-3 px-6 text-base sm:text-lg md:text-xl bg-gray-400 rounded-full border-4 border-black transition-all duration-200 transform opacity-80 cursor-not-allowed"
+                                    style={{
+                                        fontFamily: 'Arial Black, sans-serif',
+                                        textShadow: '2px 2px 0 rgba(0,0,0,0.3)'
+                                    }}
+                                >
+                                    TASK ALREADY SUBMITTED
+                                </button>
+                            ) : (
+                                <>
+                                    {participantData.domain === "Technical" && (
+                                        <TechForm
+                                            participantData={participantData}
+                                            tasks={participantData.tasks.filter(task => task.taskType === selectedTaskType)}
+                                        />
+                                    )}
+                                    {(participantData.domain === "Creative" || participantData.domain === "Creatives") && (
+                                        <CreativesForm
+                                            participantData={participantData}
+                                            tasks={participantData.tasks.filter(task => task.taskType === selectedTaskType)}
+                                        />
+                                    )}
+                                    {participantData.domain === "Corporate" && (
+                                        <CorpForm
+                                            participantData={participantData}
+                                            tasks={participantData.tasks.filter(task => task.taskType === selectedTaskType)}
+                                        />
+                                    )}
+                                </>
                             )}
                         </div>
 

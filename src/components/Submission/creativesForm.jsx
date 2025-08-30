@@ -16,14 +16,54 @@ function CreativesForm({ participantData = {}, tasks = [] }) {
         event.preventDefault();
         const formData = new FormData(event.target);
 
+        // Prepare data object
+        const selectedTaskId = formData.get('selectedTask');
+        const selectedTaskObj = tasks.find(t => String(t._id) === String(selectedTaskId) || t._id === selectedTaskId || t.title === selectedTaskId);
+        const selectedTaskTitle = selectedTaskObj?.title || selectedTaskId;
+
+        const data = {
+            name: participantData.name,
+            registrationNumber: participantData.regNo || participantData.registrationNumber,
+            email: participantData.email,
+            phone: participantData.phone,
+            year: participantData.year,
+            selectedTask: selectedTaskId,
+            selectedTaskTitle,
+            figmaPlugins: formData.get('figmaPlugins'),
+            referenceLinks: formData.get('referenceLinks'),
+            designFiles: formData.get('designFiles'),
+            domain: "Creative"
+        };
+
         try {
-            // Handle form submission logic here
-            console.log("Creative form submitted successfully");
-            // You can process the form data here
-            const data = Object.fromEntries(formData);
-            console.log("Form data:", data);
+            const response = await fetch('/api/sheet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const text = await response.text();
+            try {
+                const json = JSON.parse(text);
+                if (response.ok) {
+                    alert(json.result || 'Form submitted successfully!');
+                    setIsOpen(false);
+                } else {
+                    alert(json.error || json.message || text || 'Error submitting form.');
+                }
+            } catch (e) {
+                if (response.ok) {
+                    alert(text || 'Form submitted successfully!');
+                    setIsOpen(false);
+                } else {
+                    alert(text || 'Error submitting form.');
+                }
+            }
         } catch (error) {
-            alert("There was an error submitting the form. Please try again.");
+            console.error('Submission error:', error);
+            alert('Error submitting form. Please try again.');
         }
     };
 

@@ -16,14 +16,53 @@ function CorpForm({ participantData = {}, tasks = [] }) {
         event.preventDefault();
         const formData = new FormData(event.target);
 
+        // Prepare data object
+        const selectedTaskId = formData.get('selectedTask');
+        const selectedTaskObj = tasks.find(t => String(t._id) === String(selectedTaskId) || t._id === selectedTaskId || t.title === selectedTaskId);
+        const selectedTaskTitle = selectedTaskObj?.title || selectedTaskId;
+
+        const data = {
+            name: participantData.name,
+            registrationNumber: participantData.regNo || participantData.registrationNumber,
+            email: participantData.email,
+            phone: participantData.phone,
+            year: participantData.year,
+            selectedTask: selectedTaskId,
+            selectedTaskTitle,
+            introVideo: formData.get('introVideo'),
+            documentLink: formData.get('documentLink'),
+            domain: "Corporate"
+        };
+
         try {
-            // Handle form submission logic here
-            console.log("Corporate form submitted successfully");
-            // You can process the form data here
-            const data = Object.fromEntries(formData);
-            console.log("Form data:", data);
+            const response = await fetch('/api/sheet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const text = await response.text();
+            try {
+                const json = JSON.parse(text);
+                if (response.ok) {
+                    alert(json.result || 'Form submitted successfully!');
+                    setIsOpen(false);
+                } else {
+                    alert(json.error || json.message || text || 'Error submitting form.');
+                }
+            } catch (e) {
+                if (response.ok) {
+                    alert(text || 'Form submitted successfully!');
+                    setIsOpen(false);
+                } else {
+                    alert(text || 'Error submitting form.');
+                }
+            }
         } catch (error) {
-            alert("There was an error submitting the form. Please try again.");
+            console.error('Submission error:', error);
+            alert('Error submitting form. Please try again.');
         }
     };
 
@@ -169,11 +208,11 @@ function CorpForm({ participantData = {}, tasks = [] }) {
 
                             <div className="flex flex-col space-y-2 w-full">
                                 <label className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 flex items-center">
-                                    Demo Video:
+                                    Self introduction Video:
                                     <span className="ml-2 text-red-500 text-sm">*Required for all years</span>
                                 </label>
                                 <input
-                                    name="demoVideo"
+                                    name="introVideo"
                                     className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black placeholder:text-gray-400 border-2 border-black focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="Drive link (required)"
                                     required

@@ -12,27 +12,63 @@ function TechForm({ participantData = {}, tasks = [] }) {
         setIsOpen(false);
     };
 
+    // Normalize year checks (handles values like "2nd Year", "2", "Second Year")
+    const isSecondYear = participantData.year && /\b2(?:nd)?\b/i.test(String(participantData.year));
+    const isFirstYear = participantData.year && /\b1(?:st)?\b/i.test(String(participantData.year));
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const demoVideoInput = event.target.elements.demoVideo.value;
+        const formData = new FormData(event.target);
+
+        // Prepare data object
+        const selectedTaskId = formData.get('selectedTask');
+        const selectedTaskObj = tasks.find(t => String(t._id) === String(selectedTaskId) || t._id === selectedTaskId || t.title === selectedTaskId);
+        const selectedTaskTitle = selectedTaskObj?.title || selectedTaskId;
+
+        const data = {
+            name: participantData.name,
+            registrationNumber: participantData.regNo || participantData.registrationNumber,
+            email: participantData.email,
+            phone: participantData.phone,
+            year: participantData.year,
+            selectedTask: selectedTaskId,
+            selectedTaskTitle,
+            githubLink: formData.get('githubLink'),
+            deployedLink: formData.get('deployedLink'),
+            demoVideo: formData.get('demoVideo'),
+            domain: "Technical"
+        };
 
         try {
-            const response = await fetch(demoVideoInput, {
-                method: "HEAD",
-                redirect: "follow"
+            const response = await fetch('/api/sheet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             });
-            if (
-                response.url.startsWith("https://accounts.google.com/v3/signin")
-            ) {
-                alert(
-                    "The provided link is not public. Please provide a public link."
-                );
-            } else {
-                // Handle form submission
-                console.log("Form submitted successfully");
+
+            const text = await response.text();
+            try {
+                const json = JSON.parse(text);
+                if (response.ok) {
+                    alert(json.result || 'Form submitted successfully!');
+                    setIsOpen(false);
+                } else {
+                    alert(json.error || json.message || text || 'Error submitting form.');
+                }
+            } catch (e) {
+                // Not JSON
+                if (response.ok) {
+                    alert(text || 'Form submitted successfully!');
+                    setIsOpen(false);
+                } else {
+                    alert(text || 'Error submitting form.');
+                }
             }
         } catch (error) {
-            alert("There was an error checking the link. Please try again.");
+            console.error('Submission error:', error);
+            alert('Error submitting form. Please try again.');
         }
     };
 
@@ -191,18 +227,18 @@ function TechForm({ participantData = {}, tasks = [] }) {
                             <div className="flex flex-col space-y-2 w-full">
                                 <label className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 flex items-center">
                                     Deployed Link:
-                                    {participantData.year === '2' && (
+                                    {isSecondYear && (
                                         <span className="ml-2 text-red-500 text-sm">*Required for 2nd years</span>
                                     )}
-                                    {participantData.year === '1' && (
+                                    {isFirstYear && (
                                         <span className="ml-2 text-gray-500 text-sm">(Optional for 1st years)</span>
                                     )}
                                 </label>
                                 <input
                                     name="deployedLink"
                                     className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black placeholder:text-gray-400 border-2 border-black focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
-                                    placeholder={participantData.year === '2' ? "Required for 2nd year students" : "(optional)"}
-                                    required={participantData.year === '2'}
+                                    placeholder={isSecondYear ? "Required for 2nd year students" : "(optional)"}
+                                    required={isSecondYear}
                                 />
                             </div>
 
