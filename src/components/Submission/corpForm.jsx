@@ -176,7 +176,7 @@ function CorpForm({ participantData = {}, tasks = [] }) {
 
                             <div className="flex flex-col space-y-2 w-full">
                                 <label className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 flex items-center">
-                                    � Document for Answers:
+                                    Document for Answers:
                                     <span className="ml-2 text-red-500 text-sm">*Required</span>
                                 </label>
                                 <input
