@@ -125,58 +125,13 @@ function CorpForm({ participantData = {}, tasks = [] }) {
                             </h2>
                         </div>
 
-                        {/* Participant Information - Prefilled and Uneditable */}
-                        <div className="bg-gradient-to-r from-blue-100 to-green-100 p-4 rounded-xl border-3 border-black shadow-[6px_6px_0px_0px_#000] mb-6">
-                            <h3 className="font-bold text-lg text-gray-800 mb-3 text-center">
-                                Participant Information
-                            </h3>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="flex flex-col space-y-1">
-                                    <label className="text-sm font-semibold text-gray-700">Name</label>
-                                    <input
-                                        value={participantData.name || ''}
-                                        readOnly
-                                        className="rounded-lg px-3 py-2 text-sm bg-gray-100 text-gray-800 border-2 border-gray-300 cursor-not-allowed"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col space-y-1">
-                                    <label className="text-sm font-semibold text-gray-700">Registration Number</label>
-                                    <input
-                                        value={participantData.regNo || participantData.registrationNumber || ''}
-                                        readOnly
-                                        className="rounded-lg px-3 py-2 text-sm bg-gray-100 text-gray-800 border-2 border-gray-300 cursor-not-allowed"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col space-y-1">
-                                    <label className="text-sm font-semibold text-gray-700">Email</label>
-                                    <input
-                                        value={participantData.email || ''}
-                                        readOnly
-                                        className="rounded-lg px-3 py-2 text-sm bg-gray-100 text-gray-800 border-2 border-gray-300 cursor-not-allowed"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col space-y-1">
-                                    <label className="text-sm font-semibold text-gray-700">Phone Number</label>
-                                    <input
-                                        value={participantData.phone || ''}
-                                        readOnly
-                                        className="rounded-lg px-3 py-2 text-sm bg-gray-100 text-gray-800 border-2 border-gray-300 cursor-not-allowed"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col space-y-1">
-                                    <label className="text-sm font-semibold text-gray-700">Year</label>
-                                    <input
-                                        value={participantData.year || ''}
-                                        readOnly
-                                        className="rounded-lg px-3 py-2 text-sm bg-gray-100 text-gray-800 border-2 border-gray-300 cursor-not-allowed"
-                                    />
-                                </div>
-                            </div>
+                        {/* Participant Information - included as hidden fields (do not display to user) */}
+                        <div className="sr-only">
+                            <input type="hidden" name="name" value={participantData.name || ''} />
+                            <input type="hidden" name="registrationNumber" value={participantData.regNo || participantData.registrationNumber || ''} />
+                            <input type="hidden" name="email" value={participantData.email || ''} />
+                            <input type="hidden" name="phone" value={participantData.phone || ''} />
+                            <input type="hidden" name="year" value={participantData.year || ''} />
                         </div>
 
                         {/* Task Selection */}

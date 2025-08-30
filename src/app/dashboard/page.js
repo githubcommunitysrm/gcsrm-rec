@@ -112,6 +112,17 @@ const Dashboard = () => {
         return Array.from(taskTypes);
     };
 
+    // Normalize domain string to match keys in taskTypeInstructions
+    const getInstructionKey = (domain) => {
+        if (!domain) return '';
+        const d = domain.trim().toLowerCase();
+        if (d === 'creative' || d === 'creatives') return 'Creatives';
+        if (d === 'technical' || d === 'technical ') return 'Technical';
+        if (d === 'corporate' || d === 'corporates') return 'Corporate';
+        // fallback to original domain (preserve case if it already matches keys)
+        return domain;
+    };
+
     useEffect(() => {
         if (participantData && participantData.tasks.length > 0) {
             const taskTypes = getTaskTypes(participantData.tasks);
@@ -426,7 +437,7 @@ const Dashboard = () => {
 
                             <div className="bg-white bg-opacity-90 rounded-lg p-4 border-2 border-black text-black">
                                 <p className="text-justify font-semibold">
-                                    {taskTypeInstructions[participantData.domain] || "No instructions available."}
+                                    {taskTypeInstructions[getInstructionKey(participantData.domain)] || "No instructions available."}
                                 </p>
                                 <div className="mt-4 p-3 bg-green-100 rounded-lg border-2 border-green-500">
                                     <p className="text-lg font-bold text-center">
