@@ -161,11 +161,12 @@ function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true
 			<Toaster />
 			{/* Mario-styled Submit Button */}
 			<button
-				type="submit"
+				type="button"
 				disabled={isSubmitting}
+				onClick={handleOpen}
 				className={`w-full py-3 px-6 rounded-lg font-bold text-lg transition-all duration-300 ${isSubmitting
-						? 'bg-gray-500 cursor-not-allowed'
-						: 'bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+					? 'bg-gray-500 cursor-not-allowed'
+					: 'bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
 					} border-4 border-black`}
 				style={{
 					fontFamily: 'Arial Black, sans-serif',

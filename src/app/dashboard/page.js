@@ -13,17 +13,17 @@ import CorpForm from '@/components/Submission/corpForm';
 
 const taskTypeInstructions = {
 	Technical:
-		'Choose the task as per your preference, for Web Dev Choose any one among Front End, Back End or Full Stack. Click the Submit Task button to submit your task before the deadline.',
+		'Choose your challenge! For Web Development, pick one task: Front End OR Back End. For AIML, select one task from the two available options. Complete your chosen task and click the Submit Task button to submit using your SRM email before the deadline. Keep your work original and showcase your skills!',
 	Creatives:
-		' Here’s your canvas to shine! Take time with each design or edit, follow the brief, meet the deadline, and submit using your SRM email.Most importantly-make it authentic and creative, let your work speak for you.',
+		'✨ Your Creative Quest Begins! First Years: Choose 1 GFX Task (Recruitment Poster OR OSSOME Hacks 2.0 Hero Section). Second Years: Choose 1 GFX Task (Instagram 3-Grid OR Website Landing Page). VFX (All Years): Pick Your Style (Club Intro Video [15–20s], Post-Event Reel [25–30s], or Think. Shoot. Edit. [Your creative freedom!]). Take time with each design or edit, follow the brief, meet the deadline, and submit using your SRM email. Most importantly—make it authentic and creative, let your work speak for you!',
 	Corporate:
-		"Complete all sections thoughtfully and submit your responses by the deadline using your SRM email ID click the 'View Task' Button to Open submission form. Keep your answers original and true to yourself. (No AI/ChatGPT assistance allowed!)",
+		'📋 Your Mission Awaits! First Years: Sponsorship & Partnership Outreach Challenge. Second Years: Pick Your Path (Option 1: Event Report Creation OR Option 2: Complete Event Planning Strategy). Common Task: 30s-1min Self-Introduction Video. Take time with each section, stick to the deadline, use your SRM email, and keep it real—no AI/ChatGPT assistance allowed. Hit "View Task" to start working on your quest.',
 };
 
 // Submission window (India Standard Time)
 // Start: 31st Aug 2025 03:00:00 IST
 // End:   6th Sep 2025 23:59:59 IST
-const SUBMISSION_START = new Date('2025-08-31T03:00:00+05:30');
+const SUBMISSION_START = new Date('2025-08-31T01:00:00+05:30');
 const SUBMISSION_END = new Date('2025-09-06T23:59:59+05:30');
 
 const formatForDisplay = (d) =>
@@ -159,8 +159,8 @@ const Dashboard = () => {
 						<button
 							key={type}
 							className={`px-4 py-2 rounded-md text-white font-poppins ${selectedTaskType === type
-									? 'bg-green-500'
-									: 'bg-gray-700'
+								? 'bg-green-500'
+								: 'bg-gray-700'
 								} hover:bg-green-600`}
 							onClick={() => setSelectedTaskType(type)}>
 							{type} Tasks
@@ -175,8 +175,8 @@ const Dashboard = () => {
 						<button
 							key={type}
 							className={`px-4 py-2 rounded-md text-white font-poppins ${selectedTaskType === type
-									? 'bg-green-500'
-									: 'bg-gray-700'
+								? 'bg-green-500'
+								: 'bg-gray-700'
 								} hover:bg-green-600`}
 							onClick={() => setSelectedTaskType(type)}>
 							{type} Tasks
@@ -334,8 +334,8 @@ const Dashboard = () => {
 							{/* Status Message */}
 							<div
 								className={`text-center p-4 rounded-lg border-2 ${error
-										? 'bg-red-100 border-red-500'
-										: 'bg-green-100 border-green-500'
+									? 'bg-red-100 border-red-500'
+									: 'bg-green-100 border-green-500'
 									}`}>
 								<div className="flex items-center justify-center mb-2">
 									{error ? (
@@ -354,8 +354,8 @@ const Dashboard = () => {
 									)}
 									<span
 										className={`font-bold text-lg ${error
-												? 'text-red-700'
-												: 'text-green-700'
+											? 'text-red-700'
+											: 'text-green-700'
 											}`}>
 										{error
 											? error
@@ -640,8 +640,8 @@ const Dashboard = () => {
 											<button
 												key={type}
 												className={`px-6 py-3 rounded-lg border-4 border-black font-bold text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 ${selectedTaskType === type
-														? 'bg-gradient-to-b from-green-400 to-green-600 text-black shadow-lg'
-														: 'bg-gradient-to-b from-red-400 to-red-600 text-black hover:from-red-500 hover:to-red-700'
+													? 'bg-gradient-to-b from-green-400 to-green-600 text-black shadow-lg'
+													: 'bg-gradient-to-b from-red-400 to-red-600 text-black hover:from-red-500 hover:to-red-700'
 													}`}
 												onClick={() =>
 													setSelectedTaskType(type)
