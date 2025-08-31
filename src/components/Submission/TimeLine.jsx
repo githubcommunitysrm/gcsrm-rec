@@ -298,6 +298,21 @@ const TimeLine = ({ status }) => {
 						</div>
 					</div>
 
+					{/* Submission Deadline */}
+					<div className=" flex justify-center relative z-20">
+						<div className="inline-flex items-center bg-yellow-300 text-black px-3 py-1 rounded-full border-2 border-black text-xs sm:text-sm font-extrabold">
+							<div className="relative w-4 h-4 mr-2">
+								<Image
+									src="/item_star.png"
+									alt="Deadline"
+									fill
+									className="object-contain"
+								/>
+							</div>
+							Deadline: 5 Sep 2025 • 11:59 PM
+						</div>
+					</div>
+
 					{/* Timeline Steps */}
 					<div
 						className="flex justify-between items-end relative z-20 pt-12 pb-8"
