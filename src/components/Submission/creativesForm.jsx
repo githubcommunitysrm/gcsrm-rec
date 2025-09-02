@@ -3,7 +3,11 @@ import { AiOutlineClose } from 'react-icons/ai';
 import toast, { Toaster } from 'react-hot-toast';
 import confetti from 'canvas-confetti';
 
-function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true }) {
+function CreativesForm({
+	participantData = {},
+	tasks = [],
+	submissionOpen = true,
+}) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -21,28 +25,35 @@ function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true
 		if (!submissionOpen) {
 			toast.error('Submission window is closed', {
 				duration: 5000,
-				style: { background: '#ef4444', color: '#fff', fontSize: '16px' },
+				style: {
+					background: '#ef4444',
+					color: '#fff',
+					fontSize: '16px',
+				},
 			});
 			return;
 		}
 
 		setIsSubmitting(true);
 
-		const loadingToastId = toast.loading('🎮 Processing your adventure request...', {
-			style: {
-				background: '#fc8e2d',
-				color: '#000',
-				fontSize: '14px',
-				fontWeight: '800',
-				fontFamily: 'ArcadeClassic',
-				border: '4px solid #000',
-				borderRadius: '0px',
-				padding: '16px 20px',
-				boxShadow: '8px 8px 0px #000',
-				textTransform: 'uppercase',
-				letterSpacing: '1px',
-			},
-		});
+		const loadingToastId = toast.loading(
+			'🎮 Processing your adventure request...',
+			{
+				style: {
+					background: '#fc8e2d',
+					color: '#000',
+					fontSize: '14px',
+					fontWeight: '800',
+					fontFamily: 'ArcadeClassic',
+					border: '4px solid #000',
+					borderRadius: '0px',
+					padding: '16px 20px',
+					boxShadow: '8px 8px 0px #000',
+					textTransform: 'uppercase',
+					letterSpacing: '1px',
+				},
+			}
+		);
 		const formData = new FormData(event.target);
 
 		// Prepare data object
@@ -79,19 +90,59 @@ function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true
 				body: JSON.stringify(data),
 			});
 
-
 			const text = await response.text();
 
 			try {
 				const json = JSON.parse(text);
 				if (response.ok) {
 					// Mario confetti pattern
-					confetti({ particleCount: 50, spread: 60, origin: { y: 0.7, x: 0.3 }, colors: ['#ff4757', '#3742fa', '#ffa502', '#2ed573'], shapes: ['square', 'circle'], scalar: 1.2 });
-					setTimeout(() => confetti({ particleCount: 50, spread: 60, origin: { y: 0.7, x: 0.7 }, colors: ['#ff4757', '#3742fa', '#ffa502', '#2ed573'], shapes: ['square', 'circle'], scalar: 1.2 }), 200);
-					setTimeout(() => confetti({ particleCount: 30, spread: 80, origin: { y: 0.5, x: 0.5 }, colors: ['#ffdd59', '#ff6b6b', '#4ecdc4', '#45b7d1'], shapes: ['circle'], scalar: 0.8 }), 400);
+					confetti({
+						particleCount: 50,
+						spread: 60,
+						origin: { y: 0.7, x: 0.3 },
+						colors: ['#ff4757', '#3742fa', '#ffa502', '#2ed573'],
+						shapes: ['square', 'circle'],
+						scalar: 1.2,
+					});
+					setTimeout(
+						() =>
+							confetti({
+								particleCount: 50,
+								spread: 60,
+								origin: { y: 0.7, x: 0.7 },
+								colors: [
+									'#ff4757',
+									'#3742fa',
+									'#ffa502',
+									'#2ed573',
+								],
+								shapes: ['square', 'circle'],
+								scalar: 1.2,
+							}),
+						200
+					);
+					setTimeout(
+						() =>
+							confetti({
+								particleCount: 30,
+								spread: 80,
+								origin: { y: 0.5, x: 0.5 },
+								colors: [
+									'#ffdd59',
+									'#ff6b6b',
+									'#4ecdc4',
+									'#45b7d1',
+								],
+								shapes: ['circle'],
+								scalar: 0.8,
+							}),
+						400
+					);
 					toast.dismiss(loadingToastId);
 					toast.success(
-						`Wahoo! ${participantData.name || 'Hero'}, submission received!`,
+						`Wahoo! ${
+							participantData.name || 'Hero'
+						}, submission received!`,
 						{
 							duration: 7000,
 							style: {
@@ -110,23 +161,40 @@ function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true
 								letterSpacing: '1px',
 							},
 							icon: '🎮',
-							iconTheme: { primary: '#000', secondary: '#fc8e2d' },
+							iconTheme: {
+								primary: '#000',
+								secondary: '#fc8e2d',
+							},
 						}
 					);
 					setIsOpen(false);
 				} else {
 					toast.dismiss(loadingToastId);
-					toast.error(json.error || json.message || text || 'Error submitting form.', { duration: 6000 });
+					toast.error(
+						json.error ||
+							json.message ||
+							text ||
+							'Error submitting form.',
+						{ duration: 6000 }
+					);
 				}
 			} catch (e) {
 				if (response.ok) {
-					confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
+					confetti({
+						particleCount: 60,
+						spread: 80,
+						origin: { y: 0.6 },
+					});
 					toast.dismiss(loadingToastId);
-					toast.success(text || 'Form submitted successfully!', { duration: 5000 });
+					toast.success(text || 'Form submitted successfully!', {
+						duration: 5000,
+					});
 					setIsOpen(false);
 				} else {
 					toast.dismiss(loadingToastId);
-					toast.error(text || 'Error submitting form.', { duration: 5000 });
+					toast.error(text || 'Error submitting form.', {
+						duration: 5000,
+					});
 				}
 			}
 		} catch (error) {
@@ -164,17 +232,17 @@ function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true
 				type="button"
 				disabled={isSubmitting}
 				onClick={handleOpen}
-				className={`w-full py-3 px-6 rounded-lg font-bold text-lg transition-all duration-300 ${isSubmitting
-					? 'bg-gray-500 cursor-not-allowed'
-					: 'bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
-					} border-4 border-black`}
+				className={`w-full py-3 px-6 rounded-lg font-bold text-lg transition-all duration-300 ${
+					isSubmitting
+						? 'bg-gray-500 cursor-not-allowed'
+						: 'bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+				} border-4 border-black`}
 				style={{
 					fontFamily: 'Arial Black, sans-serif',
 					textTransform: 'uppercase',
 					letterSpacing: '1px',
 					boxShadow: isSubmitting ? 'none' : '8px 8px 0px #000',
-				}}
-			>
+				}}>
 				{isSubmitting ? (
 					<span className="flex items-center justify-center">
 						<span className="animate-spin mr-2">🍄</span>
@@ -183,7 +251,8 @@ function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true
 				) : (
 					'Submit Your Creative Adventure'
 				)}
-			</button>			{/* Mario-themed Modal */}
+			</button>{' '}
+			{/* Mario-themed Modal */}
 			{isOpen && (
 				<div
 					className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4"
@@ -302,7 +371,7 @@ function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true
 
 							<div className="flex flex-col space-y-2 w-full">
 								<label className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 flex items-center">
-									Design Ping Links:
+									Design Png Link:
 									<span className="ml-2 text-red-500 text-sm">
 										*Required
 									</span>
@@ -310,7 +379,7 @@ function CreativesForm({ participantData = {}, tasks = [], submissionOpen = true
 								<input
 									name="designLink"
 									className="rounded-lg px-3 py-3 text-sm sm:text-base md:text-lg bg-gray-50 text-black placeholder:text-gray-400 border-2 border-black focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
-									placeholder="Link to your PNG in GDrive "
+									placeholder="Link to your PNG in Google Drive"
 									required
 								/>
 							</div>
