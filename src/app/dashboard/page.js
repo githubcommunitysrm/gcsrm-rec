@@ -133,9 +133,9 @@ const Dashboard = () => {
 	const getInstructionKey = (domain) => {
 		if (!domain) return '';
 		const d = domain.trim().toLowerCase();
-		if (d === 'creative' || d === 'creatives') return 'Creatives';
+		if (d === 'creatives' || d === 'creatives') return 'Creatives';
 		if (d === 'technical' || d === 'technical ') return 'Technical';
-		if (d === 'corporate' || d === 'corporates') return 'Corporate';
+		if (d === 'corporate' || d === 'corporate') return 'Corporate';
 		// fallback to original domain (preserve case if it already matches keys)
 		return domain;
 	};
@@ -719,8 +719,7 @@ const Dashboard = () => {
 											submissionOpen={submissionOpen}
 										/>
 									)}
-									{(participantData.domain === 'Creative' ||
-										participantData.domain ===
+									{(participantData.domain ===
 										'Creatives') && (
 											<CreativesForm
 												participantData={participantData}

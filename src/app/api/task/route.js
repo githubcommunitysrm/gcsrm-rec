@@ -58,8 +58,8 @@ export async function GET(request) {
         const domainVariations = [];
         if (domain === "Corporate") {
             domainVariations.push("Corporate");
-        } else if (domain === "Creative" || domain === "Creatives") {
-            domainVariations.push("Creative", "Creatives");
+        } else if (domain === "Creatives") {
+            domainVariations.push("Creatives");
         } else if (domain === "Technical") {
             domainVariations.push("Technical");
         } else {

@@ -78,7 +78,7 @@ function CreativesForm({
 			figmaPlugins: formData.get('figmaPlugins'),
 			designLink: formData.get('designLink'),
 			designFiles: formData.get('designFiles'),
-			domain: 'Creative',
+			domain: 'Creatives',
 		};
 
 		try {
