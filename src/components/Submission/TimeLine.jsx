@@ -20,7 +20,7 @@ const steps = [
 	{
 		id: 3,
 		key: 'interviewShortlisted',
-		label: 'BOWSER QUEST!',
+		label: 'INTERVIEW QUEST!',
 		castle: '/browser.png',
 		ground: '/brick-ground.png',
 	},
@@ -107,9 +107,8 @@ const MarioTimelineStep = ({ step, currentStep, index }) => {
 			<div className={`relative ${isCurrent ? 'castle-bounce ' : ''}`}>
 				{/* Flag above castle */}
 				<div
-					className={`absolute -top-8 left-1/2 transform -translate-x-1/2 w-6 h-6 z-30 mt-5 ${
-						isCompleted || isCurrent ? 'flag-wave' : ''
-					}`}></div>
+					className={`absolute -top-8 left-1/2 transform -translate-x-1/2 w-6 h-6 z-30 mt-5 ${isCompleted || isCurrent ? 'flag-wave' : ''
+						}`}></div>
 
 				{/* Castle */}
 				<div className="relative w-16 h-16 sm:w-20 sm:h-20 mt-7">
@@ -117,11 +116,10 @@ const MarioTimelineStep = ({ step, currentStep, index }) => {
 						src={step.castle}
 						alt={`${step.label} Castle`}
 						fill
-						className={`object-contain transition-all duration-500 ${
-							isCompleted
+						className={`object-contain transition-all duration-500 ${isCompleted
 								? 'brightness-100'
 								: 'brightness-50 grayscale'
-						}`}
+							}`}
 					/>
 
 					{/* Completion Star */}
@@ -155,25 +153,23 @@ const MarioTimelineStep = ({ step, currentStep, index }) => {
 			<div className="mt-4 text-center">
 				{/* Main Label */}
 				<div
-					className={`mario-text text-sm sm:text-base font-bold mb-1 ${
-						isCompleted
+					className={`mario-text text-sm sm:text-base font-bold mb-1 ${isCompleted
 							? 'text-yellow-400'
 							: isCurrent
-							? 'text-green-400'
-							: 'text-gray-500'
-					}`}>
+								? 'text-green-400'
+								: 'text-gray-500'
+						}`}>
 					{step.label}
 				</div>
 
 				{/* Sub Label */}
 				<div
-					className={`text-xs sm:text-sm font-medium ${
-						isCompleted
+					className={`text-xs sm:text-sm font-medium ${isCompleted
 							? 'text-white'
 							: isCurrent
-							? 'text-yellow-300'
-							: 'text-gray-400'
-					}`}>
+								? 'text-yellow-300'
+								: 'text-gray-400'
+						}`}>
 					{step.marioLabel}
 				</div>
 
@@ -309,7 +305,7 @@ const TimeLine = ({ status }) => {
 									className="object-contain"
 								/>
 							</div>
-							Deadline: 5 Sep 2025 • 11:59 PM
+							Deadline: 7 Sep 2025 • 12:00 PM
 						</div>
 					</div>
 
