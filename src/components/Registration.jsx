@@ -652,7 +652,7 @@ const RegistrationForm = () => {
 										style={{ backgroundColor: isRegistrationOpen ? '#f4bb00' : '#d1d5db' }}>
 										<option value="">Select your domain</option>
 										<option value="Technical">Technical</option>
-										<option value="Creative">Creative</option>
+										<option value="Creatives">Creatives</option>
 										<option value="Corporate">Corporate</option>
 									</select>
 									{errors.domain && (

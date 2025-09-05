@@ -7,7 +7,7 @@ const ProfileCard = ({ name, regNo, domain }) => {
         switch (domain) {
             case "Technical":
                 return "Technical Hero";
-            case "Creative":
+            case "Creatives":
                 return "Creative Master";
             case "Corporate":
                 return "Corporate Champion";
@@ -29,7 +29,7 @@ const ProfileCard = ({ name, regNo, domain }) => {
                     color: "#D42000", // Mario Red
                     bgColor: "from-red-400 to-red-600"
                 };
-            case "Creative":
+            case "Creatives":
                 return {
                     character: "/quean.png",
                     powerUp: "/item_star.png",
