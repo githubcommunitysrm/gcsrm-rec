@@ -8,9 +8,9 @@ export async function POST(request) {
 
     // Submission window (India Standard Time)
     // Start: 31st Aug 2025 03:00:00 IST
-    // End:   6th Sep 2025 23:59:59 IST
+    // End:   7th Sep 2025 12:00:00 IST
     const SUBMISSION_START = new Date('2025-08-31T03:00:00+05:30');
-    const SUBMISSION_END = new Date('2025-09-05T23:59:59+05:30');
+    const SUBMISSION_END = new Date('2025-09-07T12:00:00+05:30');
     const now = new Date();
 
     if (now < SUBMISSION_START) {
