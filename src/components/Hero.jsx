@@ -23,7 +23,7 @@ const HeroSection = () => {
   const registrationStartDate = new Date(2025, 7, 25, 0, 0, 0); // August 25, 2025 at 00:00:00
   const registrationEndDate = new Date(2025, 7, 30, 23, 59, 59); // August 30, 2025 at 23:59:59
   const taskStartDate = new Date(2025, 7, 31, 3, 0, 0); // August 31, 2025 at 03:00:00
-  const taskEndDate = new Date(2025, 8, 5, 23, 59, 59); // September 6, 2025 at 23:59:59
+  const taskEndDate = new Date(2025, 8, 7, 12, 0, 0); // September 7, 2025 at 12:00:00
 
   const totalSecondsWindow = Math.max(
     1,
