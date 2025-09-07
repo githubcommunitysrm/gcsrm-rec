@@ -20,11 +20,13 @@ const HeroSection = () => {
   const [rightBump, setRightBump] = useState(false);
   const rightTimers = useRef({ returnTimer: null, cleanupTimer: null });
 
-  const registrationStartDate = new Date(2025, 8, 25, 0, 0, 0); // August 25, 2025 at 00:00:00
-  const registrationEndDate = new Date(2025, 8, 30, 23, 59, 59); // August 30, 2025 at 23:59:59
-  const taskStartDate = new Date(2025, 8, 31, 3, 0, 0); // August 31, 2025 at 03:00:00
-  const taskEndDate = new Date(2025, 9, 7, 12, 0, 0); // September 7, 2025 at 12:00:00
-  const statusTill = new Date(2025, 9, 17, 0, 0, 0); // September 17, 2025 at 00:00:00
+  const registrationStartDate = new Date(2025, 7, 25, 0, 0, 0); // August 25, 2025 at 00:00:00
+  const registrationEndDate = new Date(2025, 7, 30, 23, 59, 59); // August 30, 2025 at 23:59:59
+  const taskStartDate = new Date(2025, 7, 31, 3, 0, 0); // August 31, 2025 at 03:00:00
+  const taskEndDate = new Date(2025, 8, 7, 12, 0, 0); // September 7, 2025 at 12:00:00
+  const statusTill = new Date(2025, 8, 17, 0, 0, 0); // September 17, 2025 at 00:00:00
+  const showStatusCTA = true; // set to true to force status behavior
+  const statusCTALabel = 'CHECK MY STATUS';
 
   const totalSecondsWindow = Math.max(
     1,
@@ -118,11 +120,6 @@ const HeroSection = () => {
     now.getTime() >= taskStartDate.getTime() &&
     now.getTime() <= taskEndDate.getTime();
 
-  // Status override: when enabled, the main CTA says "Check my status"
-  // and always redirects to the dashboard without removing original logic.
-  // You can toggle this or compute based on dates as needed.
-  const showStatusCTA = true; // set to true to force status behavior
-  const statusCTALabel = 'CHECK MY STATUS';
 
   // Calculate time left based on current state
   let timeLeft;
