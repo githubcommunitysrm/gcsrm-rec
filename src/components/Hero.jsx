@@ -505,16 +505,15 @@ const HeroSection = () => {
               }
             }}
             disabled={showStatusCTA ? false : (hydrated ? (isRegistrationClosed && !isTaskSubmissionActive) : true)}
-            className={`relative overflow-hidden font-bold py-4 px-8 text-xl rounded border-4 border-black shadow-2xl transform transition-all duration-300 ${hydrated && (isRegistrationClosed && !isTaskSubmissionActive)
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 hover:scale-105'
+            className={`relative overflow-hidden font-bold py-4 px-8 text-xl rounded border-4 border-black shadow-2xl transform transition-all duration-300 ${showStatusCTA
+              ? 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 hover:scale-105 text-black'
+              : hydrated && (isRegistrationClosed && !isTaskSubmissionActive)
+                ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                : 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 hover:scale-105 text-black'
               }`}
             style={{ fontFamily: 'Arial Black, sans-serif' }}>
             <span
-              className={`flex items-center space-x-2 ${hydrated && (isRegistrationClosed && !isTaskSubmissionActive)
-                ? 'text-gray-600'
-                : 'text-black'
-                }`}>
+              className={`flex items-center space-x-2`}>
               <span className="text-2xl">
                 {hydrated && (isRegistrationClosed && !isTaskSubmissionActive) ? '⏰' : ''}
               </span>
