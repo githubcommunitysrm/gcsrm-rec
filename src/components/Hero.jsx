@@ -24,6 +24,9 @@ const HeroSection = () => {
   const registrationEndDate = new Date(2025, 7, 30, 23, 59, 59); // August 30, 2025 at 23:59:59
   const taskStartDate = new Date(2025, 7, 31, 3, 0, 0); // August 31, 2025 at 03:00:00
   const taskEndDate = new Date(2025, 8, 7, 12, 0, 0); // September 7, 2025 at 12:00:00
+  const statusTill = new Date(2025, 8, 17, 0, 0, 0); // September 17, 2025 at 00:00:00
+  const showStatusCTA = true; // set to true to force status behavior
+  const statusCTALabel = 'CHECK MY STATUS';
 
   const totalSecondsWindow = Math.max(
     1,
@@ -116,6 +119,7 @@ const HeroSection = () => {
   const isTaskSubmissionActive =
     now.getTime() >= taskStartDate.getTime() &&
     now.getTime() <= taskEndDate.getTime();
+
 
   // Calculate time left based on current state
   let timeLeft;
@@ -482,6 +486,10 @@ const HeroSection = () => {
         <div className="relative mb-12 mt-8">
           <button
             onClick={() => {
+              if (showStatusCTA) {
+                window.location.href = '/dashboard';
+                return;
+              }
               if (isRegistrationActive || (!isRegistrationExpired && !isTaskSubmissionOpen)) {
                 // During registration or before registration opens: scroll to registration
                 const registrationSection =
@@ -496,46 +504,49 @@ const HeroSection = () => {
                 window.location.href = '/dashboard';
               }
             }}
-            disabled={hydrated ? (isRegistrationClosed && !isTaskSubmissionActive) : true}
-            className={`relative overflow-hidden font-bold py-4 px-8 text-xl rounded border-4 border-black shadow-2xl transform transition-all duration-300 ${hydrated && (isRegistrationClosed && !isTaskSubmissionActive)
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 hover:scale-105'
+            disabled={showStatusCTA ? false : (hydrated ? (isRegistrationClosed && !isTaskSubmissionActive) : true)}
+            className={`relative overflow-hidden font-bold py-4 px-8 text-xl rounded border-4 border-black shadow-2xl transform transition-all duration-300 ${showStatusCTA
+              ? 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 hover:scale-105 text-black'
+              : hydrated && (isRegistrationClosed && !isTaskSubmissionActive)
+                ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                : 'bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 hover:scale-105 text-black'
               }`}
             style={{ fontFamily: 'Arial Black, sans-serif' }}>
             <span
-              className={`flex items-center space-x-2 ${hydrated && (isRegistrationClosed && !isTaskSubmissionActive)
-                ? 'text-gray-600'
-                : 'text-black'
-                }`}>
+              className={`flex items-center space-x-2`}>
               <span className="text-2xl">
                 {hydrated && (isRegistrationClosed && !isTaskSubmissionActive) ? '⏰' : ''}
               </span>
               <span className="flex flex-col items-center">
                 <span>
-                  {hydrated
-                    ? isTaskSubmissionActive
-                      ? 'SUBMIT TASKS NOW!'
-                      : isRegistrationActive
-                        ? 'REGISTER NOW!'
-                        : isRegistrationExpired && !isTaskSubmissionOpen
-                          ? 'REGISTRATION CLOSED!'
-                          : !isRegistrationExpired
-                            ? 'REGISTER NOW!'
-                            : 'REGISTRATION CLOSED!'
-                    : 'REGISTER'}
+                  {showStatusCTA
+                    ? statusCTALabel
+                    : hydrated
+                      ? isTaskSubmissionActive
+                        ? 'SUBMIT TASKS NOW!'
+                        : isRegistrationActive
+                          ? 'REGISTER NOW!'
+                          : isRegistrationExpired && !isTaskSubmissionOpen
+                            ? 'REGISTRATION CLOSED!'
+                            : !isRegistrationExpired
+                              ? 'REGISTER NOW!'
+                              : 'REGISTRATION CLOSED!'
+                      : 'REGISTER'}
                 </span>
                 <span className="text-xl font-normal text-yellow-300">
-                  {hydrated
-                    ? isTaskSubmissionActive
-                      ? 'Dashboard Open!'
-                      : isRegistrationActive
-                        ? `${formatTime(timeLeft)}`
-                        : isRegistrationExpired && !isTaskSubmissionOpen
-                          ? 'Tasks Open Soon!'
-                          : !isRegistrationExpired
-                            ? `${formatTime(timeLeft)}`
-                            : 'Time Up!'
-                    : '...'}
+                  {showStatusCTA
+                    ? 'Go to Dashboard'
+                    : hydrated
+                      ? isTaskSubmissionActive
+                        ? 'Dashboard Open!'
+                        : isRegistrationActive
+                          ? `${formatTime(timeLeft)}`
+                          : isRegistrationExpired && !isTaskSubmissionOpen
+                            ? 'Tasks Open Soon!'
+                            : !isRegistrationExpired
+                              ? `${formatTime(timeLeft)}`
+                              : 'Time Up!'
+                      : '...'}
                 </span>
               </span>
               <span className="text-2xl">
